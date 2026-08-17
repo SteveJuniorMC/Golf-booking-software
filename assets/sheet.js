@@ -18,7 +18,8 @@
 
   var el = {
     rows: document.getElementById('rows'),
-    dateLabel: document.getElementById('date-label'),
+    dateText: document.getElementById('date-text'),
+    dateInput: document.getElementById('date-input'),
     heading: document.getElementById('sheet-heading'),
     filter: document.getElementById('filter'),
     dialog: document.getElementById('booking-dialog'),
@@ -55,6 +56,19 @@
     state.dateKey = T.todayKey();
     render();
   });
+
+  // The date input sits invisibly over the label; a click should open the
+  // native calendar right away instead of just focusing the field. Handy
+  // when someone calls to book a week or two out.
+  el.dateInput.addEventListener('click', function () {
+    if (el.dateInput.showPicker) {
+      try { el.dateInput.showPicker(); } catch (e) { /* falls back to native behaviour */ }
+    }
+  });
+  el.dateInput.addEventListener('change', function () {
+    if (el.dateInput.value) state.dateKey = el.dateInput.value;
+    render();
+  });
   el.filter.addEventListener('change', function () {
     state.filter = el.filter.value;
     render();
@@ -73,22 +87,20 @@
 
   function render() {
     var rows = T.day(state.dateKey);
-    var totals = T.totals(state.dateKey);
-    var isToday = state.dateKey === T.todayKey();
+    var today = T.todayKey();
 
-    el.dateLabel.textContent = T.formatLong(state.dateKey) + (isToday ? ' (today)' : '');
+    var name = state.dateKey === today ? 'Today'
+             : state.dateKey === T.addDays(today, 1) ? 'Tomorrow'
+             : T.formatLong(state.dateKey).split(',')[0];
+    el.dateText.innerHTML =
+      '<b>' + name + '</b><small>' + T.formatShort(state.dateKey).date + ', ' +
+      state.dateKey.slice(0, 4) + ' &#9662;</small>';
+    el.dateInput.value = state.dateKey;
+
     el.heading.textContent =
       T.formatLong(state.dateKey) + ' · ' +
       (T.isWeekend(state.dateKey) ? 'Weekend rates' : 'Weekday rates') + ' · ' +
       'First tee ' + T.formatTime(T.COURSE.firstTee) + ', last tee ' + T.formatTime(T.COURSE.lastTee);
-
-    document.getElementById('stat-players').textContent = totals.players;
-    document.getElementById('stat-booked').textContent = totals.booked;
-    document.getElementById('stat-open').textContent = totals.openSlots;
-    document.getElementById('stat-fill').textContent = totals.fillRate + '%';
-    document.getElementById('stat-revenue').textContent = T.money(totals.revenue);
-    document.getElementById('stat-online').textContent =
-      totals.players ? Math.round((totals.online / totals.players) * 100) + '%' : '0%';
 
     document.getElementById('printed-at').textContent = new Date().toLocaleString();
 

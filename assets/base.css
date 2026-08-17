@@ -303,27 +303,6 @@ textarea { min-height: 4.5rem; resize: vertical; }
 .badge--in { background: var(--good); color: var(--paper); border-color: var(--good); }
 .badge--blocked { background: var(--stop); color: var(--paper); border-color: var(--stop); }
 
-/* ---------- Stats row (tee sheet) ---------- */
-
-.stats {
-  display: grid;
-  gap: .75rem;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  margin-bottom: 1.25rem;
-}
-.stat {
-  border: 3px solid var(--ink);
-  padding: .7rem .9rem;
-}
-.stat__num { font-size: 2rem; font-weight: 800; line-height: 1.1; }
-.stat__label {
-  font-size: .85rem;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  font-weight: 700;
-  color: var(--muted);
-}
-
 /* ---------- Tee sheet table ---------- */
 
 .sheet-wrap { border: 3px solid var(--line); overflow-x: auto; }
@@ -454,9 +433,7 @@ tr.row--full { background: var(--fill); }
   gap: .6rem;
   flex-wrap: wrap;
 }
-.date-nav__label { font-size: 1.35rem; font-weight: 800; }
-
-/* Booking page: arrows either side of the date; the date itself is a native
+/* Arrows either side of the date; the date itself is a native
    date input stretched invisibly over its label, so clicking it opens the
    browser's calendar. */
 .date-nav__arrow { padding: .5rem .85rem; font-size: 1.1rem; line-height: 1.25; }
@@ -580,7 +557,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
   .actions,
   th.col-actions,
   td.col-actions { display: none !important; }
-  .panel, .sheet-wrap, .stat { border-width: 2px; }
+  .panel, .sheet-wrap { border-width: 2px; }
   table.sheet th { background: #fff; color: #000; border-bottom: 2px solid #000; }
   .badge { border-color: #000 !important; color: #000 !important; background: #fff !important; }
   .spot { border-color: #000 !important; color: #000 !important; background: #fff !important; }
