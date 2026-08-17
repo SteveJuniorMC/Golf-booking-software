@@ -20,6 +20,7 @@
     rows: document.getElementById('rows'),
     dateText: document.getElementById('date-text'),
     dateInput: document.getElementById('date-input'),
+    todayBtn: document.getElementById('today'),
     heading: document.getElementById('sheet-heading'),
     filter: document.getElementById('filter'),
     dialog: document.getElementById('booking-dialog'),
@@ -96,6 +97,7 @@
       '<b>' + name + '</b><small>' + T.formatShort(state.dateKey).date + ', ' +
       state.dateKey.slice(0, 4) + ' &#9662;</small>';
     el.dateInput.value = state.dateKey;
+    el.todayBtn.hidden = state.dateKey === today;
 
     el.heading.textContent =
       T.formatLong(state.dateKey) + ' · ' +
