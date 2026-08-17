@@ -22,6 +22,16 @@ Every push to `claude/golf-tee-booking-demo-pudsgd` republishes the site via
 `.github/workflows/pages.yml`. The site is served from the repo root exactly as the files sit
 here — there is no build step.
 
+First-time setup, both one-off and done by hand in the repo settings:
+
+1. **Settings → General → Change repository visibility → Public.** Pages on a private repo needs a
+   paid plan, and even then viewers must be signed in to GitHub with access to the repo — which
+   would block the leads you send the link to.
+2. **Settings → Pages → Source: GitHub Actions.** The workflow token cannot create the Pages site
+   on its own, so the deploy fails with `Get Pages site failed / Not Found` until this is set.
+
+Then re-run the workflow from the Actions tab and the site goes live.
+
 ## Running it locally
 
 No build step, no dependencies, no server-side code. Either:
