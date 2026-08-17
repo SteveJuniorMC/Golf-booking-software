@@ -20,7 +20,10 @@
 
   var el = {
     steps: document.getElementById('steps'),
-    dateChoices: document.getElementById('date-choices'),
+    dateInput: document.getElementById('date-input'),
+    dateText: document.getElementById('date-text'),
+    prevDay: document.getElementById('prev-day'),
+    nextDay: document.getElementById('next-day'),
     results: document.getElementById('results'),
     resultsEmpty: document.getElementById('results-empty'),
     resultsSummary: document.getElementById('results-summary'),
@@ -46,30 +49,45 @@
   document.getElementById('policy-text').textContent = T.COURSE.policy;
   document.getElementById('done-policy').textContent = T.COURSE.policy;
 
-  buildDatePicker();
+  buildDateNav();
   bindFilters();
   startOnFirstOpenDay();
-  renderResults();
+  setDate(state.dateKey);
 
   /* ---------- Step 1: search --------------------------------------------- */
 
-  function buildDatePicker() {
-    var html = '';
-    for (var i = 0; i < 7; i++) {
-      var key = T.addDays(T.todayKey(), i);
-      var parts = T.formatShort(key);
-      var label = i === 0 ? 'Today' : (i === 1 ? 'Tomorrow' : parts.weekday);
-      html +=
-        '<label class="choice choice--date">' +
-          '<input type="radio" name="date" value="' + key + '"' + (i === 0 ? ' checked' : '') + '>' +
-          '<span><b>' + label + '</b><small>' + parts.date + '</small></span>' +
-        '</label>';
-    }
-    el.dateChoices.innerHTML = html;
-    el.dateChoices.addEventListener('change', function (e) {
-      state.dateKey = e.target.value;
-      renderResults();
+  function buildDateNav() {
+    el.dateInput.min = T.todayKey();
+    el.prevDay.addEventListener('click', function () { setDate(T.addDays(state.dateKey, -1)); });
+    el.nextDay.addEventListener('click', function () { setDate(T.addDays(state.dateKey, 1)); });
+
+    // The date input sits invisibly over the label; a click should open the
+    // native calendar right away instead of just focusing the field.
+    el.dateInput.addEventListener('click', function () {
+      if (el.dateInput.showPicker) {
+        try { el.dateInput.showPicker(); } catch (e) { /* falls back to native behaviour */ }
+      }
     });
+    el.dateInput.addEventListener('change', function () {
+      setDate(el.dateInput.value || state.dateKey);
+    });
+  }
+
+  /** Change the selected day, keep the nav in sync, and refresh the list. */
+  function setDate(key) {
+    var today = T.todayKey();
+    if (key < today) key = today;   // keys are YYYY-MM-DD, so string order is date order
+    state.dateKey = key;
+
+    var name = key === today ? 'Today'
+             : key === T.addDays(today, 1) ? 'Tomorrow'
+             : T.formatLong(key).split(',')[0];
+    el.dateText.innerHTML =
+      '<b>' + name + '</b><small>' + T.formatShort(key).date + ', ' + key.slice(0, 4) + ' &#9662;</small>';
+    el.dateInput.value = key;
+    el.prevDay.disabled = key <= today;
+
+    renderResults();
   }
 
   /**
@@ -84,8 +102,6 @@
         break;
       }
     }
-    var input = el.dateChoices.querySelector('input[value="' + state.dateKey + '"]');
-    if (input) input.checked = true;
   }
 
   function bindFilters() {

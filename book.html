@@ -48,8 +48,15 @@
       <h2 class="panel__title">1. When do you want to play?</h2>
 
       <div class="field">
-        <label id="date-label">Date</label>
-        <div class="choices" id="date-choices" role="radiogroup" aria-labelledby="date-label"></div>
+        <label id="date-label" for="date-input">Date</label>
+        <div class="date-nav">
+          <button type="button" class="btn date-nav__arrow" id="prev-day" aria-label="Previous day">&larr;</button>
+          <label class="date-nav__pick" title="Open the calendar">
+            <span id="date-text" aria-hidden="true"></span>
+            <input type="date" id="date-input" aria-labelledby="date-label">
+          </label>
+          <button type="button" class="btn date-nav__arrow" id="next-day" aria-label="Next day">&rarr;</button>
+        </div>
       </div>
 
       <div class="grid">
