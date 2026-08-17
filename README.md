@@ -14,7 +14,15 @@ walkthrough.
 The two halves share one data layer, so **a tee time booked on the public page shows up on the pro
 shop sheet**. That is the point of the demo.
 
-## Running it
+## Live demo
+
+<https://stevejuniormc.github.io/Golf-booking-software/>
+
+Every push to `claude/golf-tee-booking-demo-pudsgd` republishes the site via
+`.github/workflows/pages.yml`. The site is served from the repo root exactly as the files sit
+here — there is no build step.
+
+## Running it locally
 
 No build step, no dependencies, no server-side code. Either:
 
