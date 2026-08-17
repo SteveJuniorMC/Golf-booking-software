@@ -16,21 +16,25 @@ shop sheet**. That is the point of the demo.
 
 ## Live demo
 
-<https://stevejuniormc.github.io/Golf-booking-software/>
+<https://golf-tee-booking-demo.pages.dev>
 
-Every push to `claude/golf-tee-booking-demo-pudsgd` republishes the site via
-`.github/workflows/pages.yml`. The site is served from the repo root exactly as the files sit
-here — there is no build step.
+Hosted on Cloudflare Pages, which serves a public URL from this private repo — the leads you send
+the link to do not need an account. Every push to `claude/golf-tee-booking-demo-pudsgd`
+redeploys via `.github/workflows/cloudflare-pages.yml`. There is no build step; the site files are
+staged into `_site` and uploaded as-is.
 
-First-time setup, both one-off and done by hand in the repo settings:
+First-time setup, done once:
 
-1. **Settings → General → Change repository visibility → Public.** Pages on a private repo needs a
-   paid plan, and even then viewers must be signed in to GitHub with access to the repo — which
-   would block the leads you send the link to.
-2. **Settings → Pages → Source: GitHub Actions.** The workflow token cannot create the Pages site
-   on its own, so the deploy fails with `Get Pages site failed / Not Found` until this is set.
+1. **Create a Cloudflare API token** — Cloudflare dashboard → My Profile → API Tokens → Create
+   Token → *Create Custom Token*, with the **Account → Cloudflare Pages → Edit** permission.
+2. **Copy your Account ID** — shown on the right-hand side of any Cloudflare dashboard page.
+3. **Add both as repository secrets** — GitHub → Settings → Secrets and variables → Actions:
+   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
 
-Then re-run the workflow from the Actions tab and the site goes live.
+Then run the workflow from the Actions tab. The first run creates the Pages project; later runs
+just deploy to it.
+
+To use a course's own domain, add it under the Pages project → Custom domains.
 
 ## Running it locally
 
