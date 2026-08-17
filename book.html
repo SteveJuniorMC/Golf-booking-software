@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a Tee Time — Cedar Ridge Golf Club</title>
+<meta name="description" content="Reserve a tee time online at Cedar Ridge Golf Club.">
+<link rel="stylesheet" href="assets/base.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to booking</a>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Demo</strong> — Part 1 of 2: what your golfers see</span>
+    <span><a href="index.html">Demo home</a> &nbsp;·&nbsp; <a href="teesheet.html">Open the pro shop tee sheet &rarr;</a></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name" data-course-name>Cedar Ridge Golf Club</div>
+        <div class="masthead__sub" data-course-tagline>18 holes · Public · Asheville, NC</div>
+      </div>
+      <div class="masthead__sub">Pro shop: <strong data-course-phone>(828) 555-0147</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <h1>Book a tee time</h1>
+  <p class="lede">Pick a day, choose how many are playing, and reserve in about 30 seconds. No account needed.</p>
+
+  <ol class="steps" id="steps">
+    <li data-step="1" aria-current="step">1. Pick a time</li>
+    <li data-step="2">2. Your details</li>
+    <li data-step="3">3. Confirmed</li>
+  </ol>
+
+  <!-- ================= STEP 1: search and pick a tee time ================= -->
+  <section id="step-search">
+
+    <div class="panel">
+      <h2 class="panel__title">1. When do you want to play?</h2>
+
+      <div class="field">
+        <label id="date-label">Date</label>
+        <div class="choices" id="date-choices" role="radiogroup" aria-labelledby="date-label"></div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label id="players-label">Players</label>
+          <div class="choices" role="radiogroup" aria-labelledby="players-label">
+            <label class="choice"><input type="radio" name="players" value="1"><span>1</span></label>
+            <label class="choice"><input type="radio" name="players" value="2" checked><span>2</span></label>
+            <label class="choice"><input type="radio" name="players" value="3"><span>3</span></label>
+            <label class="choice"><input type="radio" name="players" value="4"><span>4</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label id="holes-label">Holes</label>
+          <div class="choices" role="radiogroup" aria-labelledby="holes-label">
+            <label class="choice"><input type="radio" name="holes" value="18" checked><span>18</span></label>
+            <label class="choice"><input type="radio" name="holes" value="9"><span>9</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label id="part-label">Time of day</label>
+          <div class="choices" role="radiogroup" aria-labelledby="part-label">
+            <label class="choice"><input type="radio" name="part" value="all" checked><span>All day</span></label>
+            <label class="choice"><input type="radio" name="part" value="morning"><span>Morning</span></label>
+            <label class="choice"><input type="radio" name="part" value="midday"><span>Midday</span></label>
+            <label class="choice"><input type="radio" name="part" value="afternoon"><span>Afternoon</span></label>
+          </div>
+        </div>
+      </div>
+
+      <p class="small muted" style="margin:0">
+        Rates shown are per player and include tax.
+        Twilight rates start at 3:00 PM. Carts are <span data-cart-rate></span> per player.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2 class="panel__title" id="results-title">Available tee times</h2>
+      <p class="muted" id="results-summary"></p>
+      <ul class="times" id="results"></ul>
+      <div class="empty-note" id="results-empty" hidden>
+        No tee times match that search. Try a different day, fewer players, or another time of day.
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= STEP 2: golfer details ================= -->
+  <section id="step-details" hidden>
+    <div class="panel">
+      <h2 class="panel__title">2. Who's playing?</h2>
+
+      <div class="panel panel--flat" style="margin-bottom:1.25rem">
+        <div style="font-size:1.4rem;font-weight:800" id="detail-heading"></div>
+        <div class="muted" id="detail-sub"></div>
+      </div>
+
+      <div class="error" id="detail-error" hidden></div>
+
+      <form id="detail-form" novalidate>
+        <div class="grid">
+          <div class="field">
+            <label for="f-name">Name on the booking</label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-phone">Mobile number</label>
+            <input type="tel" id="f-phone" name="phone" autocomplete="tel" required>
+          </div>
+          <div class="field">
+            <label for="f-email">Email <span class="field__hint">— confirmation is sent here</span></label>
+            <input type="email" id="f-email" name="email" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label id="cart-label">Riding cart?</label>
+          <div class="choices" role="radiogroup" aria-labelledby="cart-label">
+            <label class="choice"><input type="radio" name="cart" value="yes" checked><span>Yes, cart</span></label>
+            <label class="choice"><input type="radio" name="cart" value="no"><span>Walking</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-note">Anything the pro shop should know? <span class="field__hint">— optional</span></label>
+          <textarea id="f-note" name="note" placeholder="Club rentals, first-time player, group is celebrating a birthday..."></textarea>
+        </div>
+
+        <div class="panel panel--flat">
+          <h3 style="margin-top:0">Your total</h3>
+          <div class="lines" id="detail-lines"></div>
+        </div>
+
+        <div class="btn-row" style="margin-top:1.25rem">
+          <button type="submit" class="btn btn--primary">Confirm booking</button>
+          <button type="button" class="btn" id="back-to-times">Back to tee times</button>
+        </div>
+        <p class="small muted" style="margin-top:1rem" id="policy-text"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= STEP 3: confirmation ================= -->
+  <section id="step-done" hidden>
+    <div class="panel">
+      <h2 class="panel__title">3. You're booked</h2>
+      <p class="lede" id="done-headline"></p>
+
+      <p><span class="muted small">Confirmation number</span><br>
+        <span class="confirm-code mono" id="done-conf"></span></p>
+
+      <div class="lines" id="done-lines"></div>
+
+      <p class="small muted" style="margin-top:1rem" id="done-policy"></p>
+
+      <div class="btn-row">
+        <a class="btn btn--primary" href="teesheet.html">See it land on the pro shop tee sheet &rarr;</a>
+        <button type="button" class="btn" id="book-another">Book another tee time</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/book.js"></script>
+</body>
+</html>

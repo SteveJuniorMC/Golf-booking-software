@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tee Time Booking — Two Part Demo</title>
+<meta name="description" content="A working demo of online tee time booking and a digital pro shop tee sheet.">
+<link rel="stylesheet" href="assets/base.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Demo</strong> — sample data, nothing is charged and no email is sent</span>
+    <span>Built for <span data-course-name>Cedar Ridge Golf Club</span></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name">Tee Time Booking</div>
+        <div class="masthead__sub">Online booking + digital tee sheet, in one system</div>
+      </div>
+      <div class="masthead__sub">Demo for <strong data-course-name>Cedar Ridge Golf Club</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1>Two screens run your whole tee sheet</h1>
+  <p class="lede">
+    Golfers book online in about 30 seconds. The booking lands on your pro shop tee sheet
+    the moment it is made — no call, no paper book, no double bookings. Try both sides below;
+    a tee time you book on the first screen shows up on the second.
+  </p>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card__tag">Part 1 · Your golfers</div>
+      <h2>Booking page</h2>
+      <p>The page you link from your website, Google listing, and Facebook page.</p>
+      <ul>
+        <li>Live availability for the next 7 days</li>
+        <li>Weekday, weekend, twilight, and 9 hole rates priced automatically</li>
+        <li>Only shows times that fit the whole group</li>
+        <li>Confirmation number on screen and by email</li>
+        <li>No golfer account or app to download</li>
+      </ul>
+      <a class="btn btn--primary" href="book.html">Open the booking page &rarr;</a>
+    </div>
+
+    <div class="card">
+      <div class="card__tag">Part 2 · Your pro shop</div>
+      <h2>Digital tee sheet</h2>
+      <p>The screen behind the counter, replacing the paper tee sheet.</p>
+      <ul>
+        <li>Every tee time for the day on one page</li>
+        <li>Online bookings and walk-ups side by side</li>
+        <li>Check groups in as they arrive</li>
+        <li>Block times for maintenance, leagues, and outings</li>
+        <li>Players, fill rate, and expected revenue at a glance</li>
+        <li>Prints cleanly for the starter</li>
+      </ul>
+      <a class="btn btn--primary" href="teesheet.html">Open the tee sheet &rarr;</a>
+    </div>
+
+  </div>
+
+  <hr class="hr">
+
+  <h2>Suggested 2 minute walkthrough</h2>
+  <ol class="lede">
+    <li>Open the <a href="book.html">booking page</a> and book a foursome for tomorrow morning.</li>
+    <li>Note the confirmation number on the last step.</li>
+    <li>Open the <a href="teesheet.html">tee sheet</a>, move to tomorrow, and find that same booking — marked <strong>Online</strong>.</li>
+    <li>Add a phone-in booking on an open time, then check a group in.</li>
+    <li>Block a tee time for maintenance, then go back to the booking page and confirm it is gone.</li>
+  </ol>
+
+  <div class="panel">
+    <h2 class="panel__title">About this demo</h2>
+    <p>
+      The demo runs entirely in the browser with sample bookings, so it is safe to click anything.
+      Changes are saved in this browser only. <strong>Reset demo</strong> on the tee sheet restores
+      the starting data before your next walkthrough.
+    </p>
+    <p style="margin:0">
+      Course name, rates, hours, and tee time intervals are all configurable —
+      in this demo they live at the top of <span class="mono">assets/data.js</span>.
+    </p>
+  </div>
+
+</main>
+
+<script src="assets/data.js"></script>
+<script>TeeDemo.paintChrome();</script>
+</body>
+</html>

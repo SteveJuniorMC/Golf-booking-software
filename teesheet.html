@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tee Sheet — Cedar Ridge Pro Shop</title>
+<meta name="description" content="Digital tee sheet for the Cedar Ridge pro shop.">
+<link rel="stylesheet" href="assets/base.css">
+</head>
+<body>
+
+<a class="skip" href="#sheet">Skip to tee sheet</a>
+
+<div class="demo-bar no-print">
+  <div class="wrap wrap--wide">
+    <span><strong>Demo</strong> — Part 2 of 2: what your pro shop sees</span>
+    <span><a href="index.html">Demo home</a> &nbsp;·&nbsp; <a href="book.html">&larr; Open the golfer booking page</a></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap wrap--wide">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name"><span data-course-name>Cedar Ridge Golf Club</span> — Tee Sheet</div>
+        <div class="masthead__sub">Pro shop view · every booking, online or over the counter</div>
+      </div>
+      <div class="masthead__sub">Pro shop: <strong data-course-phone>(828) 555-0147</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wrap--wide" id="main">
+
+  <div class="error no-print" id="storage-warning" hidden>
+    Heads up: this browser is blocking local storage, so changes will not survive a page reload.
+    Serve the demo over http (see the README) for the full experience.
+  </div>
+
+  <div class="toolbar no-print">
+    <div class="toolbar__group date-nav">
+      <button class="btn btn--small" id="prev-day">&larr; Prev</button>
+      <button class="btn btn--small" id="today">Today</button>
+      <button class="btn btn--small" id="next-day">Next &rarr;</button>
+      <span class="date-nav__label" id="date-label"></span>
+    </div>
+    <div class="toolbar__group">
+      <label for="filter" class="nowrap" style="margin:0">Show</label>
+      <select id="filter" style="width:auto">
+        <option value="all">All tee times</option>
+        <option value="booked">Booked only</option>
+        <option value="open">Open only</option>
+      </select>
+      <button class="btn btn--small" id="print">Print sheet</button>
+      <button class="btn btn--small btn--danger" id="reset">Reset demo</button>
+    </div>
+  </div>
+
+  <h1 id="sheet-heading" class="nowrap" style="font-size:1.5rem"></h1>
+
+  <div class="stats">
+    <div class="stat"><div class="stat__num" id="stat-players">—</div><div class="stat__label">Players booked</div></div>
+    <div class="stat"><div class="stat__num" id="stat-booked">—</div><div class="stat__label">Tee times used</div></div>
+    <div class="stat"><div class="stat__num" id="stat-open">—</div><div class="stat__label">Tee times open</div></div>
+    <div class="stat"><div class="stat__num" id="stat-fill">—</div><div class="stat__label">Sheet filled</div></div>
+    <div class="stat"><div class="stat__num" id="stat-revenue">—</div><div class="stat__label">Expected revenue</div></div>
+    <div class="stat"><div class="stat__num" id="stat-online">—</div><div class="stat__label">Booked online</div></div>
+  </div>
+
+  <div class="sheet-wrap" id="sheet">
+    <table class="sheet">
+      <caption class="skip">Tee sheet for the selected day</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width:6.5rem">Time</th>
+          <th scope="col" style="width:8rem">Status</th>
+          <th scope="col">Groups</th>
+          <th scope="col" style="width:5rem">Players</th>
+          <th scope="col" style="width:4.5rem">Holes</th>
+          <th scope="col" style="width:5rem">Cart</th>
+          <th scope="col" style="width:6rem">Fees</th>
+          <th scope="col" class="col-actions" style="width:15rem">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span class="badge badge--open">Open</span>
+    <span class="badge badge--partial">Spots left</span>
+    <span class="badge badge--full">Full</span>
+    <span class="badge badge--in">Checked in</span>
+    <span class="badge badge--blocked">Blocked</span>
+    <span class="muted small">Printed <span id="printed-at"></span></span>
+  </div>
+
+  <p class="small muted no-print" style="margin-top:1.5rem">
+    Tee times booked on the <a href="book.html">golfer booking page</a> appear here automatically.
+    Walk-ups and phone calls get added with <strong>Add booking</strong>. Blocking a time pulls it
+    off the public page — use it for maintenance, shotgun starts, and outings.
+  </p>
+
+</main>
+
+<!-- ================= Add / edit booking dialog ================= -->
+<dialog id="booking-dialog">
+  <form method="dialog" id="booking-form">
+    <div class="dialog__head" id="dialog-title">Add booking</div>
+    <div class="dialog__body">
+      <div class="error" id="dialog-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="dialog-sub"></p>
+
+      <div class="field">
+        <label for="d-name">Name</label>
+        <input type="text" id="d-name" required>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label id="d-size-label">Players</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-size-label" id="d-size-choices"></div>
+        </div>
+        <div class="field">
+          <label id="d-holes-label">Holes</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-holes-label">
+            <label class="choice"><input type="radio" name="d-holes" value="18" checked><span>18</span></label>
+            <label class="choice"><input type="radio" name="d-holes" value="9"><span>9</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="d-cart-label">Cart</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-cart-label">
+            <label class="choice"><input type="radio" name="d-cart" value="yes" checked><span>Riding</span></label>
+            <label class="choice"><input type="radio" name="d-cart" value="no"><span>Walking</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="d-phone">Phone <span class="field__hint">— optional</span></label>
+        <input type="tel" id="d-phone">
+      </div>
+
+      <div class="field">
+        <label for="d-note">Note <span class="field__hint">— optional</span></label>
+        <input type="text" id="d-note" placeholder="Member account, rentals, league play...">
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="button" id="dialog-cancel">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Save booking</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= Block time dialog ================= -->
+<dialog id="block-dialog">
+  <form method="dialog" id="block-form">
+    <div class="dialog__head">Block tee time</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0" id="block-sub"></p>
+      <div class="field">
+        <label for="b-reason">Reason</label>
+        <input type="text" id="b-reason" value="Course maintenance">
+      </div>
+      <p class="small muted">Blocking removes this time from the public booking page. Any group already on it will be cleared.</p>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="block-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit">Block time</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="assets/data.js"></script>
+<script src="assets/sheet.js"></script>
+</body>
+</html>

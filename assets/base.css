@@ -1,0 +1,531 @@
+/* ==========================================================================
+   Cedar Ridge tee time demo — shared stylesheet
+   Design rules: black on white, heavy borders, large type, no gradients,
+   no decorative color. Color is used only to carry meaning (open / booked /
+   checked in / blocked), and every one of those states is also labelled in
+   words so the sheet still reads correctly in black and white or when printed.
+   ========================================================================== */
+
+:root {
+  --ink: #000;
+  --paper: #fff;
+  --muted: #444;
+  --line: #000;
+  --hairline: #bbb;
+  --fill: #eeeeee;
+  --fill-strong: #dcdcdc;
+  --good: #10621f;   /* confirmed / open  */
+  --warn: #8a5a00;   /* partially filled  */
+  --stop: #a11212;   /* blocked / cancel  */
+  --focus: #0b4fd6;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { font-size: 18px; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+.wrap--wide { max-width: 1320px; }
+
+/* ---------- Type ---------- */
+
+h1, h2, h3 { line-height: 1.15; margin: 0 0 .5rem; }
+h1 { font-size: 2.3rem; letter-spacing: -.01em; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.2rem; }
+p  { margin: 0 0 1rem; }
+
+.lede { font-size: 1.15rem; max-width: 62ch; }
+.muted { color: var(--muted); }
+.small { font-size: .9rem; }
+.nowrap { white-space: nowrap; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .02em;
+}
+
+a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { background: var(--fill); }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 10;
+  padding: .6rem 1rem;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+
+/* ---------- Page header ---------- */
+
+.masthead {
+  border-bottom: 4px solid var(--line);
+  margin-bottom: 1.75rem;
+  padding: 1.5rem 0 1.25rem;
+}
+.masthead .wrap { padding-bottom: 0; }
+.masthead__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+}
+.masthead__name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+.masthead__sub { font-size: 1rem; color: var(--muted); }
+
+.demo-bar {
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .95rem;
+  padding: .55rem 0;
+}
+.demo-bar .wrap {
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.25rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.demo-bar a { color: var(--paper); }
+.demo-bar a:hover { background: #333; }
+.demo-bar strong { text-transform: uppercase; letter-spacing: .08em; }
+
+/* ---------- Panels ---------- */
+
+.panel {
+  border: 3px solid var(--line);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  background: var(--paper);
+}
+.panel__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 .9rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.panel--flat { border-width: 2px; }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: .7rem 1.15rem;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+.btn:hover { background: var(--fill); }
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--ink); color: var(--paper); }
+.btn--primary:hover { background: #333; }
+.btn--small { padding: .4rem .7rem; font-size: .9rem; border-width: 2px; }
+.btn--danger { border-color: var(--stop); color: var(--stop); }
+.btn--danger:hover { background: #fbeaea; }
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: .45;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+
+/* ---------- Form controls ---------- */
+
+label { font-weight: 700; display: block; margin-bottom: .3rem; }
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: .6rem .7rem;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+textarea { min-height: 4.5rem; resize: vertical; }
+
+.field { margin-bottom: 1rem; }
+.field__hint { font-weight: 400; color: var(--muted); font-size: .9rem; }
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Segmented choice: a row of big, obvious toggle buttons. */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.choice {
+  position: relative;
+  display: inline-flex;
+}
+.choice input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.choice span {
+  display: inline-block;
+  padding: .6rem 1rem;
+  border: 3px solid var(--ink);
+  font-weight: 700;
+  background: var(--paper);
+  min-width: 3.2rem;
+  text-align: center;
+}
+.choice input:checked + span { background: var(--ink); color: var(--paper); }
+.choice input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+.choice input:hover + span { background: var(--fill); }
+.choice input:checked:hover + span { background: #333; }
+
+.choice--date span {
+  min-width: 6.5rem;
+  padding: .55rem .8rem;
+  line-height: 1.25;
+}
+.choice--date b { display: block; font-size: 1.05rem; }
+.choice--date small { display: block; font-weight: 600; font-size: .8rem; }
+
+/* ---------- Tee time list (customer page) ---------- */
+
+.times {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.time-card {
+  border: 3px solid var(--ink);
+  padding: .85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.time-card__time { font-size: 1.5rem; font-weight: 800; }
+.time-card__meta { font-size: .95rem; color: var(--muted); }
+.time-card__price { font-size: 1.25rem; font-weight: 800; }
+.time-card__right { text-align: right; }
+
+.empty-note {
+  border: 3px dashed var(--ink);
+  padding: 1.25rem;
+  font-weight: 700;
+}
+
+/* ---------- Summary / receipt lines ---------- */
+
+.lines { border-top: 2px solid var(--hairline); margin-top: .5rem; }
+.line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .5rem 0;
+  border-bottom: 2px solid var(--hairline);
+}
+.line--total {
+  font-size: 1.25rem;
+  font-weight: 800;
+  border-bottom: 4px solid var(--ink);
+}
+
+.confirm-code {
+  display: inline-block;
+  border: 4px solid var(--ink);
+  padding: .5rem 1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+/* ---------- Status badges ---------- */
+
+.badge {
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: .15rem .5rem;
+  border: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.badge--open { border-color: var(--good); color: var(--good); }
+.badge--partial { border-color: var(--warn); color: var(--warn); }
+.badge--full { background: var(--ink); color: var(--paper); }
+.badge--in { background: var(--good); color: var(--paper); border-color: var(--good); }
+.badge--blocked { background: var(--stop); color: var(--paper); border-color: var(--stop); }
+.badge--ghost { border-color: var(--hairline); color: var(--muted); font-weight: 700; }
+
+/* ---------- Stats row (tee sheet) ---------- */
+
+.stats {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 1.25rem;
+}
+.stat {
+  border: 3px solid var(--ink);
+  padding: .7rem .9rem;
+}
+.stat__num { font-size: 2rem; font-weight: 800; line-height: 1.1; }
+.stat__label {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* ---------- Tee sheet table ---------- */
+
+.sheet-wrap { border: 3px solid var(--line); overflow-x: auto; }
+
+table.sheet {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+table.sheet th,
+table.sheet td {
+  border-bottom: 2px solid var(--hairline);
+  border-right: 2px solid var(--hairline);
+  padding: .5rem .6rem;
+  text-align: left;
+  vertical-align: top;
+}
+table.sheet th {
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  position: sticky;
+  top: 0;
+  border-bottom: 3px solid var(--ink);
+}
+table.sheet td:last-child,
+table.sheet th:last-child { border-right: 0; }
+
+td.col-time {
+  font-size: 1.15rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+tr.row--hour td { border-top: 3px solid var(--ink); }
+tr.row--open td.col-time { color: var(--muted); }
+tr.row--blocked { background: var(--fill); }
+tr.row--blocked td.col-time { text-decoration: line-through; }
+tr.row--full { background: var(--fill); }
+
+.group {
+  padding: .25rem 0;
+  border-bottom: 1px dashed var(--hairline);
+}
+.group:last-child { border-bottom: 0; }
+.group__name { font-weight: 800; }
+.group__meta { font-size: .85rem; color: var(--muted); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  font-size: .9rem;
+  margin: .75rem 0 0;
+  align-items: center;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.toolbar__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.date-nav__label { font-size: 1.35rem; font-weight: 800; }
+
+/* ---------- Dialog ---------- */
+
+dialog {
+  border: 4px solid var(--ink);
+  padding: 0;
+  width: min(560px, 94vw);
+  color: var(--ink);
+  background: var(--paper);
+}
+dialog::backdrop { background: rgba(0, 0, 0, .55); }
+.dialog__head {
+  background: var(--ink);
+  color: var(--paper);
+  padding: .8rem 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.dialog__body { padding: 1.1rem; }
+.dialog__foot {
+  padding: 0 1.1rem 1.1rem;
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ---------- Steps (customer flow) ---------- */
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  font-weight: 700;
+}
+.steps li {
+  border: 2px solid var(--hairline);
+  color: var(--muted);
+  padding: .35rem .75rem;
+  font-size: .9rem;
+}
+.steps li[aria-current="step"] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+[hidden] { display: none !important; }
+
+.error {
+  border: 3px solid var(--stop);
+  color: var(--stop);
+  font-weight: 700;
+  padding: .6rem .8rem;
+  margin-bottom: 1rem;
+}
+
+.hr { border: 0; border-top: 3px solid var(--ink); margin: 2rem 0; }
+
+/* ---------- Home / index cards ---------- */
+
+.cards {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.card {
+  border: 3px solid var(--ink);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+.card h2 { margin-bottom: .35rem; }
+.card__tag {
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.card ul { margin: 0 0 1.25rem 1.1rem; padding: 0; }
+.card li { margin-bottom: .35rem; }
+.card .btn { margin-top: auto; }
+
+/* ---------- Print (pro shop prints the sheet every morning) ---------- */
+
+@media print {
+  html { font-size: 12pt; }
+  .demo-bar,
+  .toolbar,
+  .no-print,
+  .actions,
+  th.col-actions,
+  td.col-actions { display: none !important; }
+  .panel, .sheet-wrap, .stat { border-width: 2px; }
+  table.sheet th { background: #fff; color: #000; border-bottom: 2px solid #000; }
+  .badge { border-color: #000 !important; color: #000 !important; background: #fff !important; }
+  a { text-decoration: none; }
+  tr { break-inside: avoid; }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 17px; }
+  h1 { font-size: 1.85rem; }
+  .time-card { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .time-card__right { text-align: left; }
+}
