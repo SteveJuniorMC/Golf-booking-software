@@ -21,11 +21,31 @@ concurrency:
 
 env:
   PROJECT_NAME: golf-tee-booking-demo
+  # Keeps wrangler from dropping into an interactive browser login when it has
+  # no credentials — without this it waits instead of failing.
+  CI: "true"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
+      # Fail in seconds with a clear message rather than letting wrangler hang
+      # waiting for a login that will never come.
+      - name: Check the Cloudflare secrets are set
+        env:
+          API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=""
+          [ -z "$API_TOKEN" ] && missing="$missing CLOUDFLARE_API_TOKEN"
+          [ -z "$ACCOUNT_ID" ] && missing="$missing CLOUDFLARE_ACCOUNT_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing — add them under" \
+                 "Settings > Secrets and variables > Actions. See the README."
+            exit 1
+          fi
+
       - name: Check out the demo
         uses: actions/checkout@v4
 
