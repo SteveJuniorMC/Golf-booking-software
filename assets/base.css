@@ -374,6 +374,11 @@ tr.row--full { background: var(--fill); }
   cursor: pointer;
 }
 .spot--open:hover { background: var(--fill); border-color: var(--ink); }
+.spot--past, .spot--past:hover {
+  background: var(--paper);
+  border-color: var(--hairline);
+  cursor: default;
+}
 .spot--blocked {
   border-color: var(--stop);
   color: var(--stop);

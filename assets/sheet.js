@@ -125,6 +125,9 @@
   }
 
   function renderRow(row, newHour) {
+    // Days before today are history: still browsable, but nothing on them
+    // can be booked, blocked, checked in, or cancelled.
+    var past = state.dateKey < T.todayKey();
     var classes = ['row'];
     if (newHour) classes.push('row--hour');
     if (row.blocked) classes.push('row--blocked');
@@ -166,19 +169,27 @@
         '</button>');
       });
       if (row.open > 0) {
-        spots.push('<button type="button" class="spot spot--open" ' +
-          'style="grid-column:span ' + row.open + '" ' +
-          'data-action="add" data-time="' + row.time + '">' +
-          '<span class="spot__name">Open</span>' +
-          '<span class="spot__meta">' + row.open + ' spot' + (row.open === 1 ? '' : 's') + ' — add booking</span>' +
-        '</button>');
+        var spotsWord = row.open + ' spot' + (row.open === 1 ? '' : 's');
+        spots.push(past
+          ? '<span class="spot spot--open spot--past" style="grid-column:span ' + row.open + '">' +
+              '<span class="spot__name">Open</span>' +
+              '<span class="spot__meta">' + spotsWord + ' — went unbooked</span>' +
+            '</span>'
+          : '<button type="button" class="spot spot--open" ' +
+              'style="grid-column:span ' + row.open + '" ' +
+              'data-action="add" data-time="' + row.time + '">' +
+              '<span class="spot__name">Open</span>' +
+              '<span class="spot__meta">' + spotsWord + ' — add booking</span>' +
+            '</button>');
       }
       feesCell = row.groups.length ? '<strong>' + T.money(row.revenue) + '</strong>' : '<span class="muted">—</span>';
     }
 
     var action = '';
-    if (row.blocked) action = btn('unblock', row.time, '', 'Unblock');
-    else if (!row.groups.length) action = btn('block', row.time, '', 'Block');
+    if (!past) {
+      if (row.blocked) action = btn('unblock', row.time, '', 'Unblock');
+      else if (!row.groups.length) action = btn('block', row.time, '', 'Block');
+    }
 
     return '<tr class="' + classes.join(' ') + '">' +
       '<td class="col-time">' + row.label + '</td>' +
@@ -248,7 +259,9 @@
     '<div class="line line--total"><span>Due at the course</span><span>' +
       T.money(T.groupTotal(state.dateKey, time, group)) + '</span></div>';
 
-    el.gCheckin.hidden = group.status === 'checked-in';
+    var past = state.dateKey < T.todayKey();
+    el.gCheckin.hidden = past || group.status === 'checked-in';
+    el.gCancelBooking.hidden = past;
     el.groupDialog.showModal();
   }
 
@@ -274,6 +287,7 @@
   /* ---------- Add booking dialog ------------------------------------------ */
 
   function openBookingDialog(time) {
+    if (state.dateKey < T.todayKey()) return;   // sheet rendered before midnight
     var slot = T.slotAt(state.dateKey, time);
     state.target = { time: time, open: slot.open };
 
