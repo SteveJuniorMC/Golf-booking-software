@@ -74,12 +74,9 @@
         <tr>
           <th scope="col" style="width:6.5rem">Time</th>
           <th scope="col" style="width:8rem">Status</th>
-          <th scope="col">Groups</th>
-          <th scope="col" style="width:5rem">Players</th>
-          <th scope="col" style="width:4.5rem">Holes</th>
-          <th scope="col" style="width:5rem">Cart</th>
-          <th scope="col" style="width:6rem">Fees</th>
-          <th scope="col" class="col-actions" style="width:15rem">Actions</th>
+          <th scope="col">Players — four spots per tee time</th>
+          <th scope="col" style="width:6.5rem">Fees</th>
+          <th scope="col" class="col-actions" style="width:8rem">Actions</th>
         </tr>
       </thead>
       <tbody id="rows"></tbody>
@@ -92,6 +89,7 @@
     <span class="badge badge--full">Full</span>
     <span class="badge badge--in">Checked in</span>
     <span class="badge badge--blocked">Blocked</span>
+    <span class="muted small no-print">Click a group to check in, cancel, or see details · click open space to add a booking</span>
     <span class="muted small">Printed <span id="printed-at"></span></span>
   </div>
 
@@ -152,6 +150,20 @@
       <button value="save" class="btn btn--primary" type="submit">Save booking</button>
     </div>
   </form>
+</dialog>
+
+<!-- ================= Group details dialog ================= -->
+<dialog id="group-dialog">
+  <div class="dialog__head" id="g-title">Booking</div>
+  <div class="dialog__body">
+    <p class="muted" style="margin-top:0" id="g-sub"></p>
+    <div class="lines" id="g-lines"></div>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn btn--danger" type="button" id="g-cancel-booking">Cancel booking</button>
+    <button class="btn" type="button" id="g-close">Close</button>
+    <button class="btn btn--primary" type="button" id="g-checkin">Check in</button>
+  </div>
 </dialog>
 
 <!-- ================= Block time dialog ================= -->

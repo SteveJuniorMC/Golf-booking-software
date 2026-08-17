@@ -28,7 +28,13 @@
     sizeChoices: document.getElementById('d-size-choices'),
     blockDialog: document.getElementById('block-dialog'),
     blockForm: document.getElementById('block-form'),
-    blockSub: document.getElementById('block-sub')
+    blockSub: document.getElementById('block-sub'),
+    groupDialog: document.getElementById('group-dialog'),
+    gTitle: document.getElementById('g-title'),
+    gSub: document.getElementById('g-sub'),
+    gLines: document.getElementById('g-lines'),
+    gCheckin: document.getElementById('g-checkin'),
+    gCancelBooking: document.getElementById('g-cancel-booking')
   };
 
   T.paintChrome();
@@ -101,7 +107,7 @@
     }).join('');
 
     if (!visible.length) {
-      el.rows.innerHTML = '<tr><td colspan="8" style="padding:1.5rem;font-weight:700">' +
+      el.rows.innerHTML = '<tr><td colspan="5" style="padding:1.5rem;font-weight:700">' +
         'No tee times match that filter.</td></tr>';
     }
   }
@@ -122,75 +128,59 @@
     else if (row.open > 0) status = '<span class="badge badge--partial">' + row.open + ' left</span>';
     else status = '<span class="badge badge--full">Full</span>';
 
-    var groupsCell, holesCell, cartCell, feesCell;
+    // Every tee time renders as the same four-column strip of spots, so the
+    // rows stay a uniform height no matter what is booked on them. Details
+    // and per-group actions live in the dialog a click on a group opens.
+    var spots = [];
+    var feesCell;
 
     if (row.blocked) {
-      groupsCell = '<span class="muted">' + T.escapeHtml(row.note || 'Blocked') + '</span>';
-      holesCell = cartCell = feesCell = '<span class="muted">—</span>';
-    } else if (!row.groups.length) {
-      groupsCell = '<span class="muted">Open — 4 spots</span>';
-      holesCell = cartCell = feesCell = '<span class="muted">—</span>';
+      spots.push('<span class="spot spot--blocked" style="grid-column:span 4">' +
+        '<span class="spot__name">Blocked</span>' +
+        '<span class="spot__meta">' + T.escapeHtml(row.note || 'Blocked by the pro shop') + '</span>' +
+      '</span>');
+      feesCell = '<span class="muted">—</span>';
     } else {
-      groupsCell = row.groups.map(function (g) {
-        var badges = [
-          '<span class="badge badge--ghost">' + (g.source === 'online' ? 'Online' : 'Pro shop') + '</span>'
-        ];
-        if (g.status === 'checked-in') badges.push('<span class="badge badge--in">In</span>');
-        return '<div class="group">' +
-          '<span class="group__name">' + T.escapeHtml(g.name) + '</span> ' + badges.join(' ') +
-          '<div class="group__meta">' +
-            g.size + ' player' + (g.size === 1 ? '' : 's') +
-            (g.phone ? ' · ' + T.escapeHtml(g.phone) : '') +
-            ' · <span class="mono">' + g.conf + '</span>' +
-            (g.note ? '<br>' + T.escapeHtml(g.note) : '') +
-          '</div>' +
-        '</div>';
-      }).join('');
-
-      holesCell = joinGroups(row.groups, function (g) { return String(g.holes); });
-      cartCell = joinGroups(row.groups, function (g) { return g.cart ? 'Cart' : 'Walk'; });
-      feesCell = '<strong>' + T.money(row.revenue) + '</strong>';
-    }
-
-    var actions = [];
-    if (row.blocked) {
-      actions.push(btn('unblock', row.time, '', 'Unblock'));
-    } else {
-      if (row.open > 0) actions.push(btn('add', row.time, '', 'Add booking', true));
       row.groups.forEach(function (g) {
-        if (g.status !== 'checked-in') {
-          actions.push(btn('checkin', row.time, g.id, 'Check in' + (row.groups.length > 1 ? ' ' + firstWord(g.name) : '')));
-        }
-        actions.push(btn('cancel', row.time, g.id, 'Cancel' + (row.groups.length > 1 ? ' ' + firstWord(g.name) : ''), false, true));
+        var checkedIn = g.status === 'checked-in';
+        var meta = (checkedIn ? '<b class="spot__in">IN</b> · ' : '') +
+          g.size + ' player' + (g.size === 1 ? '' : 's') + ' · ' + g.holes + ' holes · ' +
+          (g.cart ? 'Cart' : 'Walk') + ' · ' + (g.source === 'online' ? 'Online' : 'Shop');
+        spots.push('<button type="button" class="spot spot--group' + (checkedIn ? ' spot--checked' : '') + '" ' +
+          'style="grid-column:span ' + g.size + '" ' +
+          'data-action="details" data-time="' + row.time + '" data-group="' + g.id + '">' +
+          '<span class="spot__name">' + T.escapeHtml(g.name) + '</span>' +
+          '<span class="spot__meta">' + meta + '</span>' +
+        '</button>');
       });
-      if (!row.groups.length) actions.push(btn('block', row.time, '', 'Block'));
+      if (row.open > 0) {
+        spots.push('<button type="button" class="spot spot--open" ' +
+          'style="grid-column:span ' + row.open + '" ' +
+          'data-action="add" data-time="' + row.time + '">' +
+          '<span class="spot__name">Open</span>' +
+          '<span class="spot__meta">' + row.open + ' spot' + (row.open === 1 ? '' : 's') + ' — add booking</span>' +
+        '</button>');
+      }
+      feesCell = row.groups.length ? '<strong>' + T.money(row.revenue) + '</strong>' : '<span class="muted">—</span>';
     }
+
+    var action = '';
+    if (row.blocked) action = btn('unblock', row.time, '', 'Unblock');
+    else if (!row.groups.length) action = btn('block', row.time, '', 'Block');
 
     return '<tr class="' + classes.join(' ') + '">' +
       '<td class="col-time">' + row.label + '</td>' +
       '<td>' + status + '</td>' +
-      '<td>' + groupsCell + '</td>' +
-      '<td><strong>' + row.players + '</strong><span class="muted">/4</span></td>' +
-      '<td>' + holesCell + '</td>' +
-      '<td>' + cartCell + '</td>' +
+      '<td><div class="spots">' + spots.join('') + '</div></td>' +
       '<td>' + feesCell + '</td>' +
-      '<td class="col-actions"><div class="actions">' + actions.join('') + '</div></td>' +
+      '<td class="col-actions"><div class="actions">' + action + '</div></td>' +
     '</tr>';
   }
 
-  function btn(action, time, groupId, label, primary, danger) {
-    return '<button class="btn btn--small' + (primary ? ' btn--primary' : '') + (danger ? ' btn--danger' : '') + '" ' +
+  function btn(action, time, groupId, label) {
+    return '<button class="btn btn--small" ' +
       'data-action="' + action + '" data-time="' + time + '" data-group="' + (groupId || '') + '">' +
       T.escapeHtml(label) + '</button>';
-  }
-
-  function firstWord(name) { return String(name).split(' ')[0]; }
-
-  /** "18" when both groups play 18, "18 / 9" when they differ. */
-  function joinGroups(groups, read) {
-    var values = groups.map(read);
-    var same = values.every(function (v) { return v === values[0]; });
-    return same ? values[0] : values.join(' / ');
   }
 
   /* ---------- Row actions ------------------------------------------------- */
@@ -205,22 +195,67 @@
 
     if (action === 'add') return openBookingDialog(time);
     if (action === 'block') return openBlockDialog(time);
+    if (action === 'details') return openGroupDialog(time, groupId);
 
     if (action === 'unblock') {
       T.setBlocked(state.dateKey, time, false);
       return render();
     }
-    if (action === 'checkin') {
-      T.setGroupStatus(state.dateKey, time, groupId, 'checked-in');
-      return render();
-    }
-    if (action === 'cancel') {
-      var slot = T.slotAt(state.dateKey, time);
-      var group = slot.groups.filter(function (g) { return g.id === groupId; })[0];
-      if (group && window.confirm('Cancel ' + group.name + ' at ' + T.formatTime(time) + '?')) {
-        T.cancelGroup(state.dateKey, time, groupId);
-        render();
-      }
+  });
+
+  /* ---------- Group details dialog ---------------------------------------- */
+
+  function groupAt(time, groupId) {
+    return T.slotAt(state.dateKey, time).groups.filter(function (g) { return g.id === groupId; })[0];
+  }
+
+  function openGroupDialog(time, groupId) {
+    var group = groupAt(time, groupId);
+    if (!group) return;
+    state.target = { time: time, groupId: groupId };
+
+    el.gTitle.textContent = group.name;
+    el.gSub.textContent = T.formatTime(time) + ' · ' + T.formatLong(state.dateKey);
+
+    var rows = [
+      ['Status', group.status === 'checked-in' ? 'Checked in' : 'Booked'],
+      ['Players', String(group.size)],
+      ['Holes', group.holes + ' holes'],
+      ['Cart', group.cart ? 'Riding' : 'Walking'],
+      ['Booked', group.source === 'online' ? 'Online' : 'Pro shop'],
+      ['Confirmation', group.conf]
+    ];
+    if (group.phone) rows.push(['Phone', group.phone]);
+    if (group.email) rows.push(['Email', group.email]);
+    if (group.note) rows.push(['Note', group.note]);
+
+    el.gLines.innerHTML = rows.map(function (r) {
+      return '<div class="line"><span class="muted">' + r[0] + '</span><span><strong>' +
+             T.escapeHtml(r[1]) + '</strong></span></div>';
+    }).join('') +
+    '<div class="line line--total"><span>Due at the course</span><span>' +
+      T.money(T.groupTotal(state.dateKey, time, group)) + '</span></div>';
+
+    el.gCheckin.hidden = group.status === 'checked-in';
+    el.groupDialog.showModal();
+  }
+
+  document.getElementById('g-close').addEventListener('click', function () {
+    el.groupDialog.close();
+  });
+
+  el.gCheckin.addEventListener('click', function () {
+    T.setGroupStatus(state.dateKey, state.target.time, state.target.groupId, 'checked-in');
+    el.groupDialog.close();
+    render();
+  });
+
+  el.gCancelBooking.addEventListener('click', function () {
+    var group = groupAt(state.target.time, state.target.groupId);
+    if (group && window.confirm('Cancel ' + group.name + ' at ' + T.formatTime(state.target.time) + '?')) {
+      T.cancelGroup(state.dateKey, state.target.time, state.target.groupId);
+      el.groupDialog.close();
+      render();
     }
   });
 
