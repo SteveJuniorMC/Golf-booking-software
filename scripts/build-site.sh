@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Stage exactly the files a visitor needs into _site/, which is what
-# wrangler.jsonc points at. Copying an explicit list rather than filtering the
+# Stage exactly the files a visitor needs into _site/, which is what the
+# Pages workflow uploads. Copying an explicit list rather than filtering the
 # repo root means the git history, the workflows, and the README can never be
 # published by accident.
 

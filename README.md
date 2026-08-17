@@ -16,26 +16,15 @@ shop sheet**. That is the point of the demo.
 
 ## Live demo
 
-Hosted on Cloudflare as a static-assets Worker, which serves a public URL straight from this
-private repo — the leads you send the link to do not need an account. Cloudflare watches
-`claude/golf-tee-booking-demo-pudsgd` and redeploys on every push.
-
-The URL is `https://golf-tee-booking-demo.<your-subdomain>.workers.dev`, shown on the project's
-page in the Cloudflare dashboard after the first deploy. To use a course's own domain instead, add
-it under the project → Settings → Domains & Routes.
-
-Settings to enter when connecting the repo in Cloudflare:
-
-| Field | Value |
-| --- | --- |
-| Build command | `bash scripts/build-site.sh` |
-| Deploy command | `npx wrangler deploy` |
-| Root directory | `/` |
+Hosted on GitHub Pages at **https://stevejuniormc.github.io/Golf-booking-software/** — the leads
+you send the link to do not need an account. The workflow in `.github/workflows/pages.yml`
+redeploys on every push to `claude/golf-tee-booking-demo-pudsgd`, and Pages is configured with
+Source: GitHub Actions.
 
 There is no real build. `scripts/build-site.sh` copies the pages and `assets/` into `_site/`, and
-`wrangler.jsonc` points the deploy at that directory. Staging an explicit list rather than
-publishing the repo root is what keeps the git history, this README, and anything else in the repo
-off the public site — so if you add a page, add it to that script too or it will not ship.
+the workflow uploads that directory. Staging an explicit list rather than publishing the repo root
+is what keeps this README, the workflow, and anything else in the repo off the public site — so if
+you add a page, add it to that script too or it will not ship.
 
 ## Running it locally
 
@@ -72,7 +61,7 @@ assets/data.js        shared data layer: course setup, pricing, demo bookings, s
 assets/book.js        booking page behaviour
 assets/sheet.js       tee sheet behaviour
 scripts/build-site.sh stages the published files into _site/
-wrangler.jsonc        Cloudflare deploy config
+.github/workflows/pages.yml  deploys _site/ to GitHub Pages on push
 ```
 
 ## Demo data
