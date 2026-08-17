@@ -16,25 +16,26 @@ shop sheet**. That is the point of the demo.
 
 ## Live demo
 
-<https://golf-tee-booking-demo.pages.dev>
+Hosted on Cloudflare as a static-assets Worker, which serves a public URL straight from this
+private repo — the leads you send the link to do not need an account. Cloudflare watches
+`claude/golf-tee-booking-demo-pudsgd` and redeploys on every push.
 
-Hosted on Cloudflare Pages, which serves a public URL from this private repo — the leads you send
-the link to do not need an account. Every push to `claude/golf-tee-booking-demo-pudsgd`
-redeploys via `.github/workflows/cloudflare-pages.yml`. There is no build step; the site files are
-staged into `_site` and uploaded as-is.
+The URL is `https://golf-tee-booking-demo.<your-subdomain>.workers.dev`, shown on the project's
+page in the Cloudflare dashboard after the first deploy. To use a course's own domain instead, add
+it under the project → Settings → Domains & Routes.
 
-First-time setup, done once:
+Settings to enter when connecting the repo in Cloudflare:
 
-1. **Create a Cloudflare API token** — Cloudflare dashboard → My Profile → API Tokens → Create
-   Token → *Create Custom Token*, with the **Account → Cloudflare Pages → Edit** permission.
-2. **Copy your Account ID** — shown on the right-hand side of any Cloudflare dashboard page.
-3. **Add both as repository secrets** — GitHub → Settings → Secrets and variables → Actions:
-   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+| Field | Value |
+| --- | --- |
+| Build command | `bash scripts/build-site.sh` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
 
-Then run the workflow from the Actions tab. The first run creates the Pages project; later runs
-just deploy to it.
-
-To use a course's own domain, add it under the Pages project → Custom domains.
+There is no real build. `scripts/build-site.sh` copies the pages and `assets/` into `_site/`, and
+`wrangler.jsonc` points the deploy at that directory. Staging an explicit list rather than
+publishing the repo root is what keeps the git history, this README, and anything else in the repo
+off the public site — so if you add a page, add it to that script too or it will not ship.
 
 ## Running it locally
 
@@ -63,13 +64,15 @@ printed.
 ## Files
 
 ```
-index.html          demo front door
-book.html           part 1 — golfer booking page
-teesheet.html       part 2 — pro shop tee sheet
-assets/base.css     shared stylesheet
-assets/data.js      shared data layer: course setup, pricing, demo bookings, storage
-assets/book.js      booking page behaviour
-assets/sheet.js     tee sheet behaviour
+index.html            demo front door
+book.html             part 1 — golfer booking page
+teesheet.html         part 2 — pro shop tee sheet
+assets/base.css       shared stylesheet
+assets/data.js        shared data layer: course setup, pricing, demo bookings, storage
+assets/book.js        booking page behaviour
+assets/sheet.js       tee sheet behaviour
+scripts/build-site.sh stages the published files into _site/
+wrangler.jsonc        Cloudflare deploy config
 ```
 
 ## Demo data
