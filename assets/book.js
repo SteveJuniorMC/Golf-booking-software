@@ -19,7 +19,6 @@
   };
 
   var el = {
-    steps: document.getElementById('steps'),
     dateInput: document.getElementById('date-input'),
     dateText: document.getElementById('date-text'),
     prevDay: document.getElementById('prev-day'),
@@ -314,11 +313,6 @@
     el.stepSearch.hidden = n !== 1;
     el.stepDetails.hidden = n !== 2;
     el.stepDone.hidden = n !== 3;
-
-    el.steps.querySelectorAll('li').forEach(function (li) {
-      if (Number(li.getAttribute('data-step')) === n) li.setAttribute('aria-current', 'step');
-      else li.removeAttribute('aria-current');
-    });
 
     window.scrollTo({ top: 0 });
   }
