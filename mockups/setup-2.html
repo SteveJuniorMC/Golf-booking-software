@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course setup — YourTeeSheet</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Mockup</strong> — setup wizard, step 2 of 4</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="landing.html">YourTeeSheet</a>
+    <span class="masthead__sub">Setting up your course</span>
+  </div>
+</header>
+
+<main class="shell-mid">
+  <div class="big-card">
+    <div class="kicker">Course setup · Step 2 of 4</div>
+    <h1>Tee times</h1>
+    <form action="setup-3.html">
+      <div class="grid">
+        <div class="field">
+          <label for="first-tee">First tee time</label>
+          <input type="time" id="first-tee" value="06:30" style="font:inherit;width:100%;padding:.6rem .7rem;border:3px solid var(--ink)">
+        </div>
+        <div class="field">
+          <label for="last-tee">Last tee time</label>
+          <input type="time" id="last-tee" value="18:00" style="font:inherit;width:100%;padding:.6rem .7rem;border:3px solid var(--ink)">
+        </div>
+      </div>
+      <div class="field">
+        <label id="interval-label">Minutes between tee times</label>
+        <div class="choices" role="radiogroup" aria-labelledby="interval-label">
+          <label class="choice"><input type="radio" name="interval" value="8"><span>8</span></label>
+          <label class="choice"><input type="radio" name="interval" value="9"><span>9</span></label>
+          <label class="choice"><input type="radio" name="interval" value="10" checked><span>10</span></label>
+          <label class="choice"><input type="radio" name="interval" value="12"><span>12</span></label>
+          <label class="choice"><input type="radio" name="interval" value="15"><span>15</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="slot-label">Players per tee time</label>
+        <div class="choices" role="radiogroup" aria-labelledby="slot-label">
+          <label class="choice"><input type="radio" name="slot" value="3"><span>3</span></label>
+          <label class="choice"><input type="radio" name="slot" value="4" checked><span>4</span></label>
+          <label class="choice"><input type="radio" name="slot" value="5"><span>5</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="bn-label">Back-nine starts</label>
+        <div class="choices" role="radiogroup" aria-labelledby="bn-label">
+          <label class="choice"><input type="radio" name="bn" value="no" checked><span>No</span></label>
+          <label class="choice"><input type="radio" name="bn" value="yes"><span>Yes</span></label>
+        </div>
+        <p class="field__hint" style="margin:.3rem 0 0">Turn this on if you send groups off the 10th tee. Your sheet gets a second strip per time.</p>
+      </div>
+      <p><strong>That's 70 tee times a day.</strong> <span class="muted">(6:30 AM to 6:00 PM, every 10 minutes.)</span></p>
+      <div class="form-foot">
+        <a class="btn" href="setup-1.html">&larr; Back</a>
+        <button class="btn btn--primary" type="submit" style="font-size:1.05rem">Next: green fees &rarr;</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>

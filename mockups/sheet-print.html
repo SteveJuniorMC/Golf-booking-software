@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print view — YourTeeSheet mockups</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap wrap--wide">
+    <span><strong>Mockup</strong> — hit the button (or Ctrl+P) and judge the print preview</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap wrap--wide">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name">Cedar Ridge Golf Club — Tee Sheet</div>
+        <div class="masthead__sub">Tuesday, August 18, 2026</div>
+      </div>
+      <div class="masthead__sub">Pro shop: <strong>(828) 555-0147</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wrap--wide">
+
+  <div class="toolbar no-print">
+    <div class="toolbar__group">
+      <button class="btn btn--primary" onclick="window.print()">Print this sheet</button>
+      <span class="muted">Everything gray disappears on paper; the sheet prints pure black and white.</span>
+    </div>
+  </div>
+
+  <div class="sheet-wrap">
+    <table class="sheet">
+      <thead>
+        <tr>
+          <th scope="col" style="width:6.5rem">Time</th>
+          <th scope="col" style="width:8rem">Status</th>
+          <th scope="col">Players — four spots per tee time</th>
+          <th scope="col" style="width:6.5rem">Fees</th>
+          <th scope="col" class="col-actions" style="width:8rem">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row row--hour row--full">
+          <td class="col-time">7:00 AM</td>
+          <td><span class="badge badge--in">Checked in</span></td>
+          <td><div class="spots"><span class="spot spot--group spot--checked" style="grid-column:span 4"><span class="spot__name">Alan Mercer</span><span class="spot__meta"><b class="spot__in">IN</b> · 4 players · 18 holes · Riding</span></span></div></td>
+          <td><strong>$240</strong></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row row--full">
+          <td class="col-time">7:10 AM</td>
+          <td><span class="badge badge--full">Full</span></td>
+          <td><div class="spots">
+            <span class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Beth Caldwell</span><span class="spot__meta">2 players · 18 holes · Riding</span></span>
+            <span class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Greg Doyle</span><span class="spot__meta">2 players · 18 holes · Walking</span></span>
+          </div></td>
+          <td><strong>$210</strong></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:20 AM</td>
+          <td><span class="badge badge--partial">1 left</span></td>
+          <td><div class="spots">
+            <span class="spot spot--group" style="grid-column:span 3"><span class="spot__name">Sara Quinn</span><span class="spot__meta">3 players · 18 holes · Riding</span></span>
+            <span class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot</span></span>
+          </div></td>
+          <td><strong>$180</strong></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row row--open">
+          <td class="col-time">7:30 AM</td>
+          <td><span class="badge badge--open">Open</span></td>
+          <td><div class="spots"><span class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots</span></span></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row row--blocked">
+          <td class="col-time">7:40 AM</td>
+          <td><span class="badge badge--blocked">Blocked</span></td>
+          <td><div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Course maintenance — greens mowing</span></span></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:50 AM</td>
+          <td><span class="badge badge--partial">1 left</span></td>
+          <td><div class="spots">
+            <span class="spot spot--group" style="grid-column:span 1"><span class="spot__name">Tom Novak</span><span class="spot__meta">1 player · 18 holes · Walking</span></span>
+            <span class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Hannah Foster</span><span class="spot__meta">2 players · 18 holes · Riding</span></span>
+            <span class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot</span></span>
+          </div></td>
+          <td><strong>$165</strong></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row row--hour row--full">
+          <td class="col-time">8:00 AM</td>
+          <td><span class="badge badge--full">Full</span></td>
+          <td><div class="spots"><span class="spot spot--group" style="grid-column:span 4"><span class="spot__name">Marcus Whitfield</span><span class="spot__meta">4 players · 18 holes · Riding · League play</span></span></div></td>
+          <td><strong>$240</strong></td>
+          <td class="col-actions"></td>
+        </tr>
+        <tr class="row row--open">
+          <td class="col-time">8:10 AM</td>
+          <td><span class="badge badge--open">Open</span></td>
+          <td><div class="spots"><span class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots</span></span></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span class="badge badge--open">Open</span>
+    <span class="badge badge--partial">Spots left</span>
+    <span class="badge badge--full">Full</span>
+    <span class="badge badge--in">Checked in</span>
+    <span class="badge badge--blocked">Blocked</span>
+    <span class="muted small">Printed 8/18/2026, 2:41 PM</span>
+  </div>
+
+</main>
+
+</body>
+</html>

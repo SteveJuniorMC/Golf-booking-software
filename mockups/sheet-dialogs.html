@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dialogs — YourTeeSheet mockups</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Mockup</strong> — every dialog on the tee sheet, each opens for real</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<main class="wrap" style="padding-top:2rem">
+  <h1>The six dialogs</h1>
+  <p class="lede">Each button opens the real dialog, styled exactly as it will ship. Close with the button or the Esc key.</p>
+
+  <div class="btn-row" style="margin:1.5rem 0">
+    <button class="btn btn--primary" onclick="document.getElementById('add-dialog').showModal()">1 · Add booking</button>
+    <button class="btn btn--primary" onclick="document.getElementById('group-dialog').showModal()">2 · Group details</button>
+    <button class="btn btn--primary" onclick="document.getElementById('edit-dialog').showModal()">3 · Edit booking</button>
+    <button class="btn btn--primary" onclick="document.getElementById('move-dialog').showModal()">4 · Move booking</button>
+    <button class="btn btn--primary" onclick="document.getElementById('block-dialog').showModal()">5 · Block one time</button>
+    <button class="btn btn--primary" onclick="document.getElementById('block-range-dialog').showModal()">6 · Block a range</button>
+  </div>
+
+  <h2 style="margin-top:2rem">Also: the offline banner</h2>
+  <p>If the shop's internet drops, this appears above the sheet. The sheet keeps showing the day; changes wait until the connection returns.</p>
+  <div class="notice">You're offline — the sheet is read-only until the connection returns.</div>
+
+  <h2 style="margin-top:2rem">And: the error style inside dialogs</h2>
+  <p>When two devices grab the same last spot, the slower one sees a message like this inside the dialog:</p>
+  <div class="error">Only 1 spot left on that tee time.</div>
+</main>
+
+<!-- ================= 1 · Add booking ================= -->
+<dialog id="add-dialog">
+  <form method="dialog">
+    <div class="dialog__head">Add booking</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0">9:40 AM · Tuesday, August 18, 2026 · 4 spots open<br>18 holes: $45 walking / $60 riding per player</p>
+      <div class="field">
+        <label for="a-name">Name</label>
+        <input type="text" id="a-name">
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label id="a-size-label">Players</label>
+          <div class="choices" role="radiogroup" aria-labelledby="a-size-label">
+            <label class="choice"><input type="radio" name="a-size" value="1"><span>1</span></label>
+            <label class="choice"><input type="radio" name="a-size" value="2" checked><span>2</span></label>
+            <label class="choice"><input type="radio" name="a-size" value="3"><span>3</span></label>
+            <label class="choice"><input type="radio" name="a-size" value="4"><span>4</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="a-holes-label">Holes</label>
+          <div class="choices" role="radiogroup" aria-labelledby="a-holes-label">
+            <label class="choice"><input type="radio" name="a-holes" value="18" checked><span>18</span></label>
+            <label class="choice"><input type="radio" name="a-holes" value="9"><span>9</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="a-cart-label">Cart</label>
+          <div class="choices" role="radiogroup" aria-labelledby="a-cart-label">
+            <label class="choice"><input type="radio" name="a-cart" value="yes" checked><span>Riding</span></label>
+            <label class="choice"><input type="radio" name="a-cart" value="no"><span>Walking</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="a-phone">Phone <span class="field__hint">— optional</span></label>
+        <input type="tel" id="a-phone">
+      </div>
+      <div class="field">
+        <label for="a-note">Note <span class="field__hint">— optional</span></label>
+        <input type="text" id="a-note" placeholder="Member account, rentals, league play...">
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="submit">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Save booking</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= 2 · Group details ================= -->
+<dialog id="group-dialog">
+  <div class="dialog__head">Hannah Foster</div>
+  <div class="dialog__body">
+    <p class="muted" style="margin-top:0">7:50 AM · Tuesday, August 18, 2026</p>
+    <div class="lines">
+      <div class="line"><span class="muted">Status</span><span><strong>Booked</strong></span></div>
+      <div class="line"><span class="muted">Players</span><span><strong>2</strong></span></div>
+      <div class="line"><span class="muted">Holes</span><span><strong>18 holes</strong></span></div>
+      <div class="line"><span class="muted">Cart</span><span><strong>Riding</strong></span></div>
+      <div class="line"><span class="muted">Phone</span><span><strong>(828) 555-0463</strong></span></div>
+      <div class="line"><span class="muted">Confirmation</span><span><strong>YT-7KQ2MB</strong></span></div>
+      <div class="line line--total"><span>Due at the course</span><span>$120</span></div>
+    </div>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn btn--danger" type="button" onclick="this.closest('dialog').close()">Cancel booking</button>
+    <button class="btn" type="button" onclick="this.closest('dialog').close();document.getElementById('edit-dialog').showModal()">Edit</button>
+    <button class="btn" type="button" onclick="this.closest('dialog').close();document.getElementById('move-dialog').showModal()">Move&hellip;</button>
+    <button class="btn" type="button" onclick="this.closest('dialog').close()">Close</button>
+    <button class="btn btn--primary" type="button" onclick="this.closest('dialog').close()">Check in</button>
+  </div>
+</dialog>
+
+<!-- ================= 3 · Edit booking ================= -->
+<dialog id="edit-dialog">
+  <form method="dialog">
+    <div class="dialog__head">Edit booking</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0">Hannah Foster · 7:50 AM · Tuesday, August 18, 2026</p>
+      <div class="field">
+        <label for="e-name">Name</label>
+        <input type="text" id="e-name" value="Hannah Foster">
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label id="e-size-label">Players</label>
+          <div class="choices" role="radiogroup" aria-labelledby="e-size-label">
+            <label class="choice"><input type="radio" name="e-size" value="1"><span>1</span></label>
+            <label class="choice"><input type="radio" name="e-size" value="2" checked><span>2</span></label>
+            <label class="choice"><input type="radio" name="e-size" value="3"><span>3</span></label>
+          </div>
+          <p class="field__hint" style="margin:.3rem 0 0">Up to 3 — that's their 2 plus the 1 open spot.</p>
+        </div>
+        <div class="field">
+          <label id="e-holes-label">Holes</label>
+          <div class="choices" role="radiogroup" aria-labelledby="e-holes-label">
+            <label class="choice"><input type="radio" name="e-holes" value="18" checked><span>18</span></label>
+            <label class="choice"><input type="radio" name="e-holes" value="9"><span>9</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="e-cart-label">Cart</label>
+          <div class="choices" role="radiogroup" aria-labelledby="e-cart-label">
+            <label class="choice"><input type="radio" name="e-cart" value="yes" checked><span>Riding</span></label>
+            <label class="choice"><input type="radio" name="e-cart" value="no"><span>Walking</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="e-phone">Phone <span class="field__hint">— optional</span></label>
+        <input type="tel" id="e-phone" value="(828) 555-0463">
+      </div>
+      <div class="field">
+        <label for="e-note">Note <span class="field__hint">— optional</span></label>
+        <input type="text" id="e-note">
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="submit">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Save changes</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= 4 · Move booking ================= -->
+<dialog id="move-dialog">
+  <form method="dialog">
+    <div class="dialog__head">Move booking</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0">Hannah Foster · 2 players · now at 7:50 AM, Tuesday, August 18</p>
+      <div class="field">
+        <label for="m-date">Move to which day?</label>
+        <input type="date" id="m-date" value="2026-08-18" style="font:inherit;width:100%;padding:.6rem .7rem;border:3px solid var(--ink)">
+      </div>
+      <button class="btn" type="button">Find open times</button>
+      <div class="field" style="margin-top:1rem">
+        <label id="m-time-label">Open times with room for 2</label>
+        <p class="small muted" style="margin:.2rem 0 .5rem">Morning</p>
+        <div class="choices" role="radiogroup" aria-labelledby="m-time-label">
+          <label class="choice"><input type="radio" name="m-time" value="08:10"><span>8:10 AM</span></label>
+          <label class="choice"><input type="radio" name="m-time" value="08:20" checked><span>8:20 AM</span></label>
+          <label class="choice"><input type="radio" name="m-time" value="08:40"><span>8:40 AM</span></label>
+          <label class="choice"><input type="radio" name="m-time" value="08:50"><span>8:50 AM</span></label>
+        </div>
+        <p class="small muted" style="margin:.6rem 0 .5rem">Afternoon</p>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="m-time" value="14:00"><span>2:00 PM</span></label>
+          <label class="choice"><input type="radio" name="m-time" value="15:30"><span>3:30 PM</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="submit">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Move to 8:20 AM</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= 5 · Block one time ================= -->
+<dialog id="block-dialog">
+  <form method="dialog">
+    <div class="dialog__head">Block tee time</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0">8:40 AM · Tuesday, August 18, 2026</p>
+      <div class="field">
+        <label for="b-reason">Reason</label>
+        <input type="text" id="b-reason" value="Course maintenance">
+      </div>
+      <p class="small muted">Blocked times can't be booked. Unblock any time from the sheet.</p>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="submit">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Block time</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= 6 · Block a range ================= -->
+<dialog id="block-range-dialog">
+  <form method="dialog">
+    <div class="dialog__head">Block a stretch of times</div>
+    <div class="dialog__body">
+      <p class="muted" style="margin-top:0">Tuesday, August 18, 2026</p>
+      <div class="grid">
+        <div class="field">
+          <label for="br-from">From</label>
+          <select id="br-from">
+            <option>8:50 AM</option>
+            <option selected>9:00 AM</option>
+            <option>9:10 AM</option>
+            <option>9:20 AM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="br-to">Through</label>
+          <select id="br-to">
+            <option>10:40 AM</option>
+            <option selected>10:50 AM</option>
+            <option>11:00 AM</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="br-reason">Reason</label>
+        <input type="text" id="br-reason" value="Men's league">
+      </div>
+      <div class="error">This blocks <strong>12 tee times</strong>, and <strong>3 booked groups</strong> on them will be removed.</div>
+      <label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:700">
+        <input type="checkbox" style="width:1.4rem;height:1.4rem;margin-top:.15rem">
+        <span>I understand those 3 groups come off the sheet</span>
+      </label>
+    </div>
+    <div class="dialog__foot">
+      <button value="cancel" class="btn" type="submit">Cancel</button>
+      <button value="save" class="btn btn--primary" type="submit">Block 12 times</button>
+    </div>
+  </form>
+</dialog>
+
+</body>
+</html>

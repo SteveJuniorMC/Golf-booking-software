@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tee Sheet (front &amp; back) — Cedar Ridge Golf Club — YourTeeSheet</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap wrap--wide">
+    <span><strong>Mockup</strong> — back-nine starts ON · wide screens show both tees, narrow screens get a toggle. Resize to see both.</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap wrap--wide">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name">Cedar Ridge Golf Club — Tee Sheet</div>
+        <div class="masthead__sub">YourTeeSheet · signed in as pro@cedarridge.com</div>
+      </div>
+      <div class="masthead__sub">Pro shop: <strong>(828) 555-0147</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wrap--wide" id="main">
+
+  <div class="toolbar no-print">
+    <div class="toolbar__group date-nav">
+      <button class="btn date-nav__arrow" aria-label="Previous day">&larr;</button>
+      <label class="date-nav__pick" title="Open the calendar">
+        <span aria-hidden="true"><b>Today</b><small>Aug 18, 2026 &#9662;</small></span>
+        <input type="date" value="2026-08-18" aria-label="Tee sheet date">
+      </label>
+      <button class="btn date-nav__arrow" aria-label="Next day">&rarr;</button>
+      <div class="choices bn-narrow" role="radiogroup" aria-label="Which tee to show">
+        <label class="choice"><input type="radio" name="tee" value="front" checked><span>Front nine</span></label>
+        <label class="choice"><input type="radio" name="tee" value="back"><span>Back nine</span></label>
+      </div>
+    </div>
+    <div class="toolbar__group">
+      <label for="filter" class="nowrap" style="margin:0">Show</label>
+      <select id="filter" style="width:auto">
+        <option>All tee times</option>
+        <option>Booked only</option>
+        <option>Open only</option>
+      </select>
+      <a class="btn btn--small" href="sheet-dialogs.html">Block times&hellip;</a>
+      <button class="btn btn--small">Print sheet</button>
+      <a class="btn btn--small" href="sheet-tour.html">Help</a>
+      <a class="btn btn--small" href="setup-1.html">Settings</a>
+      <a class="btn btn--small" href="login.html">Sign out</a>
+    </div>
+  </div>
+
+  <h1 class="nowrap" style="font-size:1.5rem">Tuesday, August 18, 2026 · Weekday rates · First tee 7:00 AM, last tee 6:00 PM</h1>
+
+  <!-- ================= WIDE: both tees side by side ================= -->
+  <div class="sheet-wrap bn-wide">
+    <table class="sheet">
+      <caption class="skip">Tee sheet with front and back nine starts</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width:6.5rem">Time</th>
+          <th scope="col" style="width:50%">Front nine — 1st tee</th>
+          <th scope="col" style="width:50%">Back nine — 10th tee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row row--hour">
+          <td class="col-time">7:00 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--in">Checked in</span><span class="tee-cell__fees">$240</span></div>
+            <div class="spots"><button type="button" class="spot spot--group spot--checked" style="grid-column:span 4"><span class="spot__name">Alan Mercer</span><span class="spot__meta"><b class="spot__in">IN</b> · 4 players · 18 holes · Riding</span></button></div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--open">Open</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Block</button></div>
+            <div class="spots"><button type="button" class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button></div>
+          </td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:10 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--partial">1 left</span><span class="tee-cell__fees">$180</span></div>
+            <div class="spots">
+              <button type="button" class="spot spot--group" style="grid-column:span 3"><span class="spot__name">Sara Quinn</span><span class="spot__meta">3 players · 18 holes · Riding</span></button>
+              <button type="button" class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot — add booking</span></button>
+            </div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--full">Full</span><span class="tee-cell__fees">$210</span></div>
+            <div class="spots">
+              <button type="button" class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Beth Caldwell</span><span class="spot__meta">2 players · 18 holes · Riding</span></button>
+              <button type="button" class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Greg Doyle</span><span class="spot__meta">2 players · 18 holes · Walking</span></button>
+            </div>
+          </td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:20 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--open">Open</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Block</button></div>
+            <div class="spots"><button type="button" class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button></div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--partial">2 left</span><span class="tee-cell__fees">$90</span></div>
+            <div class="spots">
+              <button type="button" class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Ed Pruitt</span><span class="spot__meta">2 players · 18 holes · Walking</span></button>
+              <button type="button" class="spot spot--open" style="grid-column:span 2"><span class="spot__name">Open</span><span class="spot__meta">2 spots — add booking</span></button>
+            </div>
+          </td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:30 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--blocked">Blocked</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Unblock</button></div>
+            <div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Course maintenance — greens mowing</span></span></div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--open">Open</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Block</button></div>
+            <div class="spots"><button type="button" class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button></div>
+          </td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:40 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--partial">1 left</span><span class="tee-cell__fees">$165</span></div>
+            <div class="spots">
+              <button type="button" class="spot spot--group" style="grid-column:span 1"><span class="spot__name">Tom Novak</span><span class="spot__meta">1 player · 18 holes · Walking</span></button>
+              <button type="button" class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Hannah Foster</span><span class="spot__meta">2 players · 18 holes · Riding</span></button>
+              <button type="button" class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot — add booking</span></button>
+            </div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--blocked">Blocked</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Unblock</button></div>
+            <div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Ladies' league — shotgun 7:40</span></span></div>
+          </td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:50 AM</td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Front</span><span class="badge badge--full">Full</span><span class="tee-cell__fees">$240</span></div>
+            <div class="spots"><button type="button" class="spot spot--group" style="grid-column:span 4"><span class="spot__name">Marcus Whitfield</span><span class="spot__meta">4 players · 18 holes · Riding</span></button></div>
+          </td>
+          <td class="tee-cell">
+            <div class="tee-cell__head"><span class="tee-tag">Back</span><span class="badge badge--open">Open</span><span class="tee-cell__fees muted">—</span><button class="btn btn--small">Block</button></div>
+            <div class="spots"><button type="button" class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ================= NARROW: one tee at a time, toggled above ================= -->
+  <div class="sheet-wrap bn-narrow">
+    <table class="sheet">
+      <caption class="skip">Front nine tee sheet</caption>
+      <thead>
+        <tr>
+          <th scope="col" style="width:6.5rem">Time</th>
+          <th scope="col" style="width:8rem">Status</th>
+          <th scope="col">Front nine — four spots per tee time</th>
+          <th scope="col" style="width:6.5rem">Fees</th>
+          <th scope="col" class="col-actions" style="width:7rem">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row row--hour row--full">
+          <td class="col-time">7:00 AM</td>
+          <td><span class="badge badge--in">Checked in</span></td>
+          <td><div class="spots"><button type="button" class="spot spot--group spot--checked" style="grid-column:span 4"><span class="spot__name">Alan Mercer</span><span class="spot__meta"><b class="spot__in">IN</b> · 4 players · 18 holes · Riding</span></button></div></td>
+          <td><strong>$240</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:10 AM</td>
+          <td><span class="badge badge--partial">1 left</span></td>
+          <td><div class="spots">
+            <button type="button" class="spot spot--group" style="grid-column:span 3"><span class="spot__name">Sara Quinn</span><span class="spot__meta">3 players · 18 holes · Riding</span></button>
+            <button type="button" class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot</span></button>
+          </div></td>
+          <td><strong>$180</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+        <tr class="row row--open">
+          <td class="col-time">7:20 AM</td>
+          <td><span class="badge badge--open">Open</span></td>
+          <td><div class="spots"><button type="button" class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"><div class="actions"><button class="btn btn--small">Block</button></div></td>
+        </tr>
+        <tr class="row row--blocked">
+          <td class="col-time">7:30 AM</td>
+          <td><span class="badge badge--blocked">Blocked</span></td>
+          <td><div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Course maintenance — greens mowing</span></span></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"><div class="actions"><button class="btn btn--small">Unblock</button></div></td>
+        </tr>
+        <tr class="row">
+          <td class="col-time">7:40 AM</td>
+          <td><span class="badge badge--partial">1 left</span></td>
+          <td><div class="spots">
+            <button type="button" class="spot spot--group" style="grid-column:span 1"><span class="spot__name">Tom Novak</span><span class="spot__meta">1 · 18 · Walk</span></button>
+            <button type="button" class="spot spot--group" style="grid-column:span 2"><span class="spot__name">Hannah Foster</span><span class="spot__meta">2 players · 18 holes · Riding</span></button>
+            <button type="button" class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot</span></button>
+          </div></td>
+          <td><strong>$165</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+        <tr class="row row--full">
+          <td class="col-time">7:50 AM</td>
+          <td><span class="badge badge--full">Full</span></td>
+          <td><div class="spots"><button type="button" class="spot spot--group" style="grid-column:span 4"><span class="spot__name">Marcus Whitfield</span><span class="spot__meta">4 players · 18 holes · Riding</span></button></div></td>
+          <td><strong>$240</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span class="badge badge--open">Open</span>
+    <span class="badge badge--partial">Spots left</span>
+    <span class="badge badge--full">Full</span>
+    <span class="badge badge--in">Checked in</span>
+    <span class="badge badge--blocked">Blocked</span>
+    <span class="muted small no-print">On a tablet, the Front nine / Back nine buttons above switch tees · printing always includes both</span>
+  </div>
+
+</main>
+
+</body>
+</html>

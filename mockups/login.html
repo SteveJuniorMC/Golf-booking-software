@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — YourTeeSheet</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Mockup</strong> — the button goes to the tee sheet</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="landing.html">YourTeeSheet</a>
+    <nav class="site-nav">
+      <a class="btn btn--primary" href="signup.html">Get started free</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell-narrow">
+  <div class="big-card">
+    <h1>Sign in</h1>
+    <!-- The error box below shows how a wrong password looks; hidden by default in the real app -->
+    <div class="error">That email and password don't match. Check both and try again.</div>
+    <form action="sheet.html">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" value="pro@cedarridge.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="text" id="password" autocomplete="current-password">
+      </div>
+      <button class="btn btn--primary btn--block" type="submit" style="font-size:1.1rem">Sign in</button>
+    </form>
+  </div>
+  <div class="auth-links">
+    <p><a href="reset.html">Forgot your password?</a></p>
+    <p>New here? <a href="signup.html">Create your free account</a></p>
+  </div>
+</main>
+
+</body>
+</html>

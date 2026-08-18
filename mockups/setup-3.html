@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course setup — YourTeeSheet</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap">
+    <span><strong>Mockup</strong> — setup wizard, step 3 of 4 · the rate grid</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="landing.html">YourTeeSheet</a>
+    <span class="masthead__sub">Setting up your course</span>
+  </div>
+</header>
+
+<main class="shell-mid">
+  <div class="big-card">
+    <div class="kicker">Course setup · Step 3 of 4</div>
+    <h1>Green fees</h1>
+    <p>Per player, in dollars — the same numbers that are on the rate board in your shop.</p>
+    <form action="setup-4.html">
+      <div class="rate-grid-wrap">
+        <table class="rate-grid">
+          <thead>
+            <tr>
+              <th></th>
+              <th colspan="2">Weekday</th>
+              <th colspan="2">Weekend</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>Walking</th>
+              <th>Riding</th>
+              <th>Walking</th>
+              <th>Riding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rate-grid__row">18 holes</td>
+              <td><span class="money">$<input type="number" value="45" min="0" aria-label="18 holes, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" value="60" min="0" aria-label="18 holes, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" value="65" min="0" aria-label="18 holes, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" value="80" min="0" aria-label="18 holes, weekend, riding"></span></td>
+            </tr>
+            <tr>
+              <td class="rate-grid__row">9 holes</td>
+              <td><span class="money">$<input type="number" value="25" min="0" aria-label="9 holes, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" value="35" min="0" aria-label="9 holes, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" value="35" min="0" aria-label="9 holes, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" value="45" min="0" aria-label="9 holes, weekend, riding"></span></td>
+            </tr>
+            <tr>
+              <td class="rate-grid__row">Twilight</td>
+              <td><span class="money">$<input type="number" value="30" min="0" aria-label="Twilight, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" value="40" min="0" aria-label="Twilight, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" value="40" min="0" aria-label="Twilight, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" value="50" min="0" aria-label="Twilight, weekend, riding"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:.75rem">After the twilight time, everyone pays the twilight rate.</p>
+
+      <div class="grid" style="margin-top:.5rem">
+        <div class="field">
+          <label for="twilight-after">Twilight starts at</label>
+          <input type="time" id="twilight-after" value="15:00" style="font:inherit;width:100%;padding:.6rem .7rem;border:3px solid var(--ink)">
+        </div>
+        <div class="field">
+          <label id="tw-label">Twilight rate</label>
+          <div class="choices" role="radiogroup" aria-labelledby="tw-label">
+            <label class="choice"><input type="radio" name="tw" value="yes" checked><span>We have one</span></label>
+            <label class="choice"><input type="radio" name="tw" value="no"><span>We don't have a twilight rate</span></label>
+          </div>
+          <p class="field__hint" style="margin:.3rem 0 0">Choosing "we don't" hides the Twilight row and the start time.</p>
+        </div>
+      </div>
+
+      <div class="form-foot">
+        <a class="btn" href="setup-2.html">&larr; Back</a>
+        <button class="btn btn--primary" type="submit" style="font-size:1.05rem">Next: time zone &rarr;</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>

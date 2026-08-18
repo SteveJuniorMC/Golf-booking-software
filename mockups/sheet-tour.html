@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The tour — YourTeeSheet mockups</title>
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+
+<div class="demo-bar no-print">
+  <div class="wrap wrap--wide">
+    <span><strong>Mockup</strong> — the first-login tour · click Next to walk all eight steps</span>
+    <span><a href="index.html">All mockups</a></span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap wrap--wide">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name">Cedar Ridge Golf Club — Tee Sheet</div>
+        <div class="masthead__sub">YourTeeSheet · signed in as pro@cedarridge.com</div>
+      </div>
+      <div class="masthead__sub">Pro shop: <strong>(828) 555-0147</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wrap--wide">
+
+  <div class="toolbar no-print">
+    <div class="toolbar__group date-nav" id="t-datenav">
+      <button class="btn date-nav__arrow" aria-label="Previous day">&larr;</button>
+      <label class="date-nav__pick"><span aria-hidden="true"><b>Today</b><small>Aug 18, 2026 &#9662;</small></span><input type="date" value="2026-08-18" aria-label="Tee sheet date"></label>
+      <button class="btn date-nav__arrow" aria-label="Next day">&rarr;</button>
+    </div>
+    <div class="toolbar__group">
+      <label for="filter" class="nowrap" style="margin:0">Show</label>
+      <select id="filter" style="width:auto">
+        <option>All tee times</option>
+        <option>Booked only</option>
+        <option>Open only</option>
+      </select>
+      <button class="btn btn--small" id="t-blockrange">Block times&hellip;</button>
+      <button class="btn btn--small" id="t-print">Print sheet</button>
+      <button class="btn btn--small" id="t-help">Help</button>
+      <a class="btn btn--small" href="setup-1.html">Settings</a>
+      <a class="btn btn--small" href="login.html">Sign out</a>
+    </div>
+  </div>
+
+  <h1 class="nowrap" style="font-size:1.5rem">Tuesday, August 18, 2026 · Weekday rates · First tee 6:30 AM, last tee 6:00 PM</h1>
+
+  <div class="sheet-wrap">
+    <table class="sheet">
+      <thead>
+        <tr>
+          <th scope="col" style="width:6.5rem">Time</th>
+          <th scope="col" style="width:8rem">Status</th>
+          <th scope="col">Players — four spots per tee time</th>
+          <th scope="col" style="width:6.5rem">Fees</th>
+          <th scope="col" class="col-actions" style="width:8rem">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row row--hour">
+          <td class="col-time">7:00 AM</td>
+          <td><span class="badge badge--partial">1 left</span></td>
+          <td><div class="spots">
+            <button type="button" class="spot spot--group" id="t-group" style="grid-column:span 3"><span class="spot__name">Sara Quinn</span><span class="spot__meta">3 players · 18 holes · Riding</span></button>
+            <button type="button" class="spot spot--open" style="grid-column:span 1"><span class="spot__name">Open</span><span class="spot__meta">1 spot — add booking</span></button>
+          </div></td>
+          <td><strong>$180</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+        <tr class="row row--open">
+          <td class="col-time">7:10 AM</td>
+          <td><span class="badge badge--open">Open</span></td>
+          <td><div class="spots">
+            <button type="button" class="spot spot--open" id="t-open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></button>
+          </div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"><div class="actions"><button class="btn btn--small">Block</button></div></td>
+        </tr>
+        <tr class="row row--blocked">
+          <td class="col-time">7:20 AM</td>
+          <td><span class="badge badge--blocked">Blocked</span></td>
+          <td><div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Course maintenance — greens mowing</span></span></div></td>
+          <td><span class="muted">—</span></td>
+          <td class="col-actions"><div class="actions"><button class="btn btn--small">Unblock</button></div></td>
+        </tr>
+        <tr class="row row--full">
+          <td class="col-time">7:30 AM</td>
+          <td><span class="badge badge--full">Full</span></td>
+          <td><div class="spots"><button type="button" class="spot spot--group" style="grid-column:span 4"><span class="spot__name">Marcus Whitfield</span><span class="spot__meta">4 players · 18 holes · Riding</span></button></div></td>
+          <td><strong>$240</strong></td>
+          <td class="col-actions"><div class="actions"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<div class="tour-spot" id="tour-spot" hidden></div>
+<div class="tour-card" id="tour-card" role="dialog" aria-modal="false" aria-labelledby="tour-title">
+  <div class="tour-card__head" id="tour-title"></div>
+  <div class="tour-card__body"><p id="tour-body"></p></div>
+  <div class="tour-card__foot">
+    <span class="tour-step" id="tour-step"></span>
+    <div class="btn-row">
+      <button class="tour-skip" id="tour-skip" type="button">Skip tour</button>
+      <button class="btn btn--small" id="tour-back" type="button">&larr; Back</button>
+      <button class="btn btn--small btn--primary" id="tour-next" type="button">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Mockup-only tour driver: the real one lives in js/tour.js and is built from
+   this exact markup and stylesheet. */
+(function () {
+  var steps = [
+    { target: null, title: 'This is your tee sheet.',
+      body: "Every tee time for today is on this one page. It's free, and it stays free. One minute of tour, then it's all yours." },
+    { target: '#t-datenav', title: 'Pick a day.',
+      body: 'Arrows move one day. Click the date to open a calendar — handy when someone calls to book next week.' },
+    { target: '#t-open', title: 'Add a booking.',
+      body: 'Click any open space to add a walk-up or phone booking. You only ever type a name — everything else is two taps.' },
+    { target: '#t-group', title: 'Everything about a group is one click.',
+      body: 'Click a group to check them in when they arrive, fix a detail, move them to another time or day, or cancel.' },
+    { target: '#filter', title: 'Cut the noise.',
+      body: "Show booked-only when you're working the day, open-only when someone's on the phone." },
+    { target: '#t-blockrange', title: 'Block times.',
+      body: 'Maintenance, leagues, outings: block one time from its row, or a whole stretch with Block times.' },
+    { target: '#t-print', title: 'Paper still works.',
+      body: 'Print puts a clean copy on the counter for the starter.' },
+    { target: '#t-help', title: "That's the whole tour.",
+      body: 'Watch it again any time from Help. Go run your day.' }
+  ];
+  var i = 0;
+  var spot = document.getElementById('tour-spot');
+  var card = document.getElementById('tour-card');
+
+  function show() {
+    var s = steps[i];
+    document.getElementById('tour-title').textContent = s.title;
+    document.getElementById('tour-body').textContent = s.body;
+    document.getElementById('tour-step').textContent = 'Step ' + (i + 1) + ' of ' + steps.length;
+    document.getElementById('tour-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+    document.getElementById('tour-next').textContent = i === steps.length - 1 ? 'Done' : 'Next →';
+
+    var target = s.target && document.querySelector(s.target);
+    if (!target) {
+      spot.hidden = true;
+      card.classList.add('tour-card--center');
+      card.style.left = card.style.top = card.style.transform = '';
+      /* darken everything when there is no cutout */
+      card.style.boxShadow = '0 0 0 9999px rgba(0,0,0,.55)';
+      return;
+    }
+    card.style.boxShadow = 'none';
+    target.scrollIntoView({ block: 'center' });
+    var r = target.getBoundingClientRect();
+    spot.hidden = false;
+    spot.style.left = (r.left - 6) + 'px';
+    spot.style.top = (r.top - 6) + 'px';
+    spot.style.width = (r.width + 12) + 'px';
+    spot.style.height = (r.height + 12) + 'px';
+    card.classList.remove('tour-card--center');
+    var top = r.bottom + 18;
+    if (top + 220 > window.innerHeight) top = Math.max(12, r.top - 238);
+    card.style.top = top + 'px';
+    card.style.left = Math.min(Math.max(12, r.left), window.innerWidth - card.offsetWidth - 12) + 'px';
+    card.style.transform = 'none';
+  }
+
+  function end() {
+    spot.hidden = true;
+    card.hidden = true;
+    document.getElementById('tour-restart').hidden = false;
+  }
+
+  document.getElementById('tour-next').addEventListener('click', function () {
+    if (i === steps.length - 1) return end();
+    i++; show();
+  });
+  document.getElementById('tour-back').addEventListener('click', function () { if (i > 0) { i--; show(); } });
+  document.getElementById('tour-skip').addEventListener('click', end);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') end(); });
+  window.addEventListener('resize', show);
+
+  var restart = document.createElement('div');
+  restart.id = 'tour-restart';
+  restart.hidden = true;
+  restart.className = 'notice no-print';
+  restart.style.position = 'fixed';
+  restart.style.left = '1rem';
+  restart.style.bottom = '1rem';
+  restart.style.background = '#fff';
+  restart.innerHTML = 'Tour finished. <button class="btn btn--small" onclick="location.reload()">Run it again</button> &nbsp; <a href="index.html">Back to all mockups</a>';
+  document.body.appendChild(restart);
+
+  show();
+})();
+</script>
+
+</body>
+</html>
