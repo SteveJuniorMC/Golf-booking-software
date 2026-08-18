@@ -657,13 +657,16 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
    and a classic serif for display type. Everything is scoped to
    body.landing so no app screen shifts by a pixel. */
 
+/* Display face: Source Serif 4 at semibold — a true middle weight, so big
+   words stay crisp instead of clotting the way full serif bolds do. Falls
+   back to Palatino, then Georgia, if the font doesn't load. */
 .landing h1,
 .landing h2,
 .landing h3,
 .landing .wordmark {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'Source Serif 4', 'Palatino Linotype', Palatino, Georgia, serif;
   letter-spacing: 0;
-  font-weight: 700;
+  font-weight: 600;
 }
 .landing h1, .landing h2 { text-wrap: balance; }
 
@@ -707,7 +710,8 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 }
 .hero-times__row:last-child { border-bottom: 0; }
 .hero-times__row b {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'Source Serif 4', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: .02em;
 }
@@ -751,7 +755,8 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 .landing .card { border-width: 2px; }
 .landing .step { border-width: 2px; }
 .landing .step__num {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'Source Serif 4', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-weight: 600;
   font-size: 2.6rem;
   line-height: 1.1;
 }
