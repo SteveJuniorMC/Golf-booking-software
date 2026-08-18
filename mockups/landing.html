@@ -8,7 +8,7 @@
 <link rel="icon" href="../assets/img/favicon.svg">
 <link rel="stylesheet" href="../assets/app.css">
 </head>
-<body>
+<body class="landing">
 
 <div class="demo-bar no-print">
   <div class="wrap">
@@ -30,17 +30,29 @@
 <main class="wrap">
 
   <section class="hero">
-    <h1>The paper tee sheet, retired.</h1>
-    <p class="lede">
-      YourTeeSheet is a digital tee sheet for your pro shop counter. Every tee time for the
-      day on one screen — walk-ups, phone bookings, check-ins, maintenance blocks. It takes
-      about five minutes to set up. <strong>It's free, and it stays free.</strong>
-    </p>
-    <div class="btn-row">
-      <a class="btn btn--primary" href="signup.html">Get started free</a>
-      <a href="../demo/">Try the live demo &rarr;</a>
+    <div>
+      <h1>The paper tee sheet, retired.</h1>
+      <p class="lede">
+        YourTeeSheet is a digital tee sheet for your pro shop counter. Every tee time for the
+        day on one screen — walk-ups, phone bookings, check-ins, maintenance blocks. It takes
+        about five minutes to set up. <strong>It's free, and it stays free.</strong>
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="signup.html">Get started free</a>
+        <a href="../demo/">Try the live demo &rarr;</a>
+      </div>
+      <p class="small muted">No credit card. No trial clock. No sales call.</p>
     </div>
-    <p class="small muted">No credit card. No trial clock. No sales call.</p>
+    <div class="hero-times" aria-hidden="true">
+      <div class="hero-times__head">Saturday · 1st tee</div>
+      <div class="hero-times__row"><b>7:00</b><span class="hero-times__state hero-times__state--full">Full</span></div>
+      <div class="hero-times__row"><b>7:10</b><span class="hero-times__state hero-times__state--full">Full</span></div>
+      <div class="hero-times__row"><b>7:20</b><span class="hero-times__state hero-times__state--left">1 left</span></div>
+      <div class="hero-times__row"><b>7:30</b><span class="hero-times__state hero-times__state--open">Open</span></div>
+      <div class="hero-times__row"><b>7:40</b><span class="hero-times__state hero-times__state--blocked">Blocked</span></div>
+      <div class="hero-times__row"><b>7:50</b><span class="hero-times__state hero-times__state--open">Open</span></div>
+      <div class="hero-times__foot">70 tee times a day. One screen.</div>
+    </div>
   </section>
 
   <section class="free-panel">

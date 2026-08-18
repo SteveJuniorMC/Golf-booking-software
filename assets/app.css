@@ -651,6 +651,125 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 .cta-band a:hover { background: #333; }
 .cta-band .btn-row { justify-content: center; margin-top: 1.25rem; align-items: center; gap: 1rem 1.5rem; }
 
+/* ---------- Landing-only refinements (body.landing) ----------
+   The landing page borrows the look of the things golfers already trust:
+   a scorecard's thin-over-thick rules, a clubhouse plaque's double border,
+   and a classic serif for display type. Everything is scoped to
+   body.landing so no app screen shifts by a pixel. */
+
+.landing h1,
+.landing h2,
+.landing h3,
+.landing .wordmark {
+  font-family: Georgia, 'Times New Roman', serif;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+.landing h1, .landing h2 { text-wrap: balance; }
+
+.landing .hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem 4.5rem;
+  align-items: center;
+  padding: 3.5rem 0 1rem;
+}
+.landing .hero h1 {
+  font-size: 3.4rem;
+  line-height: 1.05;
+  margin-bottom: .75rem;
+}
+.landing .hero .lede { line-height: 1.6; }
+
+/* The signature: a slim strip of the day's tee times — the product's own
+   material — standing beside the headline like the edge of the sheet. */
+.hero-times {
+  border: 3px solid var(--ink);
+  min-width: 15.5rem;
+  background: var(--paper);
+}
+.hero-times__head {
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: .45rem .8rem;
+}
+.hero-times__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .45rem .8rem;
+  border-bottom: 1px solid var(--hairline);
+  font-size: .95rem;
+}
+.hero-times__row:last-child { border-bottom: 0; }
+.hero-times__row b {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  letter-spacing: .02em;
+}
+.hero-times__state { font-weight: 700; }
+.hero-times__state--full { color: var(--muted); }
+.hero-times__state--open { color: var(--good); }
+.hero-times__state--left { color: var(--warn); }
+.hero-times__state--blocked { color: var(--stop); }
+.hero-times__foot {
+  border-top: 3px solid var(--ink);
+  padding: .5rem .8rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+@media (max-width: 900px) {
+  .landing .hero { grid-template-columns: 1fr; }
+  .hero-times { display: none; }
+}
+@media (max-width: 640px) {
+  .landing .hero h1 { font-size: 2.4rem; }
+}
+
+/* Scorecard rule: a thin line over a thick one. */
+.landing .hr {
+  border: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 4px solid var(--ink);
+  height: 5px;
+  margin: 2.75rem 0 2.25rem;
+}
+
+/* The free-forever plaque: heavy border with an engraved inner line. */
+.landing .free-panel {
+  padding: 2rem;
+  box-shadow: inset 0 0 0 6px var(--paper), inset 0 0 0 8px var(--ink);
+  margin: 2.75rem 0;
+}
+.landing .free-panel h2 { font-size: 2rem; }
+
+/* Let the middle of the page sit lighter than the hero and the plaque. */
+.landing .card { border-width: 2px; }
+.landing .step { border-width: 2px; }
+.landing .step__num {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
+/* Footer keeps the scorecard rule too: a thin line floating above the thick one. */
+.landing .site-footer {
+  border-top: 4px solid var(--ink);
+  position: relative;
+  padding-top: 1.75rem;
+}
+.landing .site-footer::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--ink);
+}
+
 /* ---------- Auth + wizard shells ---------- */
 
 .shell-narrow { max-width: 32rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
