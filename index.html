@@ -3,13 +3,127 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YourTeeSheet</title>
-<!-- Temporary front door while the product is being built: send visitors to
-     the mockups. The real landing page replaces this file at launch. -->
-<meta http-equiv="refresh" content="0; url=/mockups/">
-<link rel="icon" href="/assets/img/favicon.svg">
+<title>YourTeeSheet — The free digital tee sheet for golf courses</title>
+<meta name="description" content="A free digital tee sheet for your pro shop. Every tee time for the day on one screen. Free forever — no trial, no card.">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
 </head>
-<body>
-<p><a href="/mockups/">Continue to the YourTeeSheet mockups</a></p>
+<body class="landing">
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="./">YourTeeSheet</a>
+    <nav class="site-nav">
+      <a href="login.html">Sign in</a>
+      <a class="btn btn--primary" href="signup.html">Get started free</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>The paper tee sheet, retired.</h1>
+    <p class="lede">
+      YourTeeSheet is a digital tee sheet for your pro shop counter. Every tee time for the
+      day on one screen — walk-ups, phone bookings, check-ins, maintenance blocks. It takes
+      about five minutes to set up. <strong>It's free, and it stays free.</strong>
+    </p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="signup.html">Get started free</a>
+      <a href="demo/">Try the live demo &rarr;</a>
+    </div>
+    <p class="small muted">No credit card. No trial clock. No sales call.</p>
+  </section>
+
+  <section class="free-panel">
+    <h2>Free forever. Really.</h2>
+    <p>
+      The tee sheet — everything on this page — costs nothing, now or later. No trial,
+      no card, no player limits, no "premium" version of it.
+    </p>
+    <p style="margin-bottom:0">
+      Down the road we'll offer an optional paid add-on that lets golfers book online.
+      If you never want it, you never pay us a cent.
+    </p>
+  </section>
+
+  <h2>Built for the counter, not for a computer person</h2>
+  <p class="lede">Big type, plain words, and nothing to install. If you can use a paper tee sheet, you can use this one.</p>
+
+  <div class="cards" style="margin-top:1.25rem">
+    <div class="card">
+      <h3>The whole day on one screen</h3>
+      <p style="margin-bottom:0">Every tee time from first to last, who's on it, and what's open. No tabs, no scrolling sideways.</p>
+    </div>
+    <div class="card">
+      <h3>Book callers weeks out</h3>
+      <p style="margin-bottom:0">Click the date, pick the day from a calendar, put them on an open time. Done while they're still on the phone.</p>
+    </div>
+    <div class="card">
+      <h3>Check-in at a glance</h3>
+      <p style="margin-bottom:0">One click marks a group checked in. Every status is written in words — not just a color you have to remember.</p>
+    </div>
+    <div class="card">
+      <h3>Block times when you need them</h3>
+      <p style="margin-bottom:0">Maintenance, frost delay, league night, an outing — block one time or a whole stretch in one go.</p>
+    </div>
+    <div class="card">
+      <h3>Front and back nine starts</h3>
+      <p style="margin-bottom:0">Send groups off the 10th? Turn on back-nine starts and the sheet shows both tees.</p>
+    </div>
+    <div class="card">
+      <h3>Prints clean for the starter</h3>
+      <p style="margin-bottom:0">One click prints the day in plain black and white, the way the starter likes it.</p>
+    </div>
+  </div>
+
+  <hr class="hr">
+
+  <h2>What it looks like</h2>
+  <div class="shot-frame">
+    <!-- Placeholder: a real screenshot of a populated sheet replaces this at launch -->
+    <table class="sheet" aria-hidden="true">
+      <thead>
+        <tr><th style="width:6.5rem">Time</th><th style="width:8rem">Status</th><th>Players — four spots per tee time</th><th style="width:6.5rem">Fees</th></tr>
+      </thead>
+      <tbody>
+        <tr class="row--full"><td class="col-time">8:00 AM</td><td><span class="badge badge--full">Full</span></td><td><div class="spots"><span class="spot spot--group" style="grid-column:span 4"><span class="spot__name">Marcus Whitfield</span><span class="spot__meta">4 players · 18 holes · Riding</span></span></div></td><td><strong>$240</strong></td></tr>
+        <tr><td class="col-time">8:10 AM</td><td><span class="badge badge--partial">2 left</span></td><td><div class="spots"><span class="spot spot--group spot--checked" style="grid-column:span 2"><span class="spot__name">Beth Caldwell</span><span class="spot__meta"><b class="spot__in">IN</b> · 2 players · 18 holes · Walking</span></span><span class="spot spot--open" style="grid-column:span 2"><span class="spot__name">Open</span><span class="spot__meta">2 spots — add booking</span></span></div></td><td><strong>$90</strong></td></tr>
+        <tr class="row--open"><td class="col-time">8:20 AM</td><td><span class="badge badge--open">Open</span></td><td><div class="spots"><span class="spot spot--open" style="grid-column:span 4"><span class="spot__name">Open</span><span class="spot__meta">4 spots — add booking</span></span></div></td><td><span class="muted">—</span></td></tr>
+        <tr class="row--blocked"><td class="col-time">8:30 AM</td><td><span class="badge badge--blocked">Blocked</span></td><td><div class="spots"><span class="spot spot--blocked" style="grid-column:span 4"><span class="spot__name">Blocked</span><span class="spot__meta">Course maintenance — greens mowing</span></span></div></td><td><span class="muted">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">A Saturday morning on YourTeeSheet.</p>
+
+  <hr class="hr">
+
+  <h2>How you start</h2>
+  <ol class="steps">
+    <li class="step"><span class="step__num">1</span><strong>Create a free account.</strong> An email and a password — that's the whole form.</li>
+    <li class="step"><span class="step__num">2</span><strong>Answer a few questions about your course.</strong> Tee times, green fees, done in about five minutes.</li>
+    <li class="step"><span class="step__num">3</span><strong>Your sheet is ready.</strong> A one-minute tour shows you around, then it's yours.</li>
+  </ol>
+
+</main>
+
+<div class="cta-band">
+  <div class="wrap" style="padding-bottom:0">
+    <h2>Run tomorrow's tee sheet on it.</h2>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="signup.html">Get started free</a>
+      <a href="demo/">Try the live demo &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 YourTeeSheet</span>
+    <span><a href="demo/">Try the demo</a> &nbsp;·&nbsp; <a href="login.html">Sign in</a> &nbsp;·&nbsp; Questions? <a href="mailto:stevejuniormc@gmail.com">stevejuniormc@gmail.com</a></span>
+  </div>
+</footer>
+
 </body>
 </html>
