@@ -9,7 +9,10 @@
       "README.md",
       "firebase-debug.log",
       "firestore.rules",
-      "firestore.indexes.json"
+      "firestore.indexes.json",
+      "mockups/**",
+      "demo/book.html",
+      "demo/assets/book.js"
     ],
     "headers": [
       {

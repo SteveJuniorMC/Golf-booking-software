@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=1320">
-<title>Tee Sheet — Cedar Ridge Pro Shop</title>
-<meta name="description" content="Digital tee sheet for the Cedar Ridge pro shop.">
-<link rel="stylesheet" href="assets/base.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live demo — the YourTeeSheet tee sheet</title>
+<meta name="description" content="A live demo of the YourTeeSheet digital tee sheet, loaded with sample bookings. Click anything — nothing is real.">
+<link rel="icon" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/app.css">
 </head>
 <body>
 
@@ -13,8 +14,8 @@
 
 <div class="demo-bar no-print">
   <div class="wrap wrap--wide">
-    <span><strong>Demo</strong> — Part 2 of 2: what your pro shop sees</span>
-    <span><a href="index.html">Demo home</a> &nbsp;·&nbsp; <a href="book.html">&larr; Open the golfer booking page</a></span>
+    <span><strong>Demo</strong> — sample data, saved only in this browser. Click anything.</span>
+    <span><a href="../">YourTeeSheet home</a> &nbsp;·&nbsp; <a href="../signup.html">Get started free &rarr;</a></span>
   </div>
 </div>
 
@@ -23,7 +24,7 @@
     <div class="masthead__row">
       <div>
         <div class="masthead__name"><span data-course-name>Cedar Ridge Golf Club</span> — Tee Sheet</div>
-        <div class="masthead__sub">Pro shop view · every booking, online or over the counter</div>
+        <div class="masthead__sub">A live demo of YourTeeSheet · this is the screen behind your counter</div>
       </div>
       <div class="masthead__sub">Pro shop: <strong data-course-phone>(828) 555-0147</strong></div>
     </div>
@@ -33,12 +34,11 @@
 <main class="wrap wrap--wide" id="main">
 
   <div class="error no-print" id="storage-warning" hidden>
-    Heads up: this browser is blocking local storage, so changes will not survive a page reload.
-    Serve the demo over http (see the README) for the full experience.
+    Heads up: this browser is blocking local storage, so demo changes will not survive a page reload.
   </div>
 
   <div class="toolbar no-print">
-    <div class="toolbar__group date-nav">
+    <div class="toolbar__group date-nav" id="date-nav">
       <button class="btn date-nav__arrow" id="prev-day" aria-label="Previous day">&larr;</button>
       <label class="date-nav__pick" title="Open the calendar">
         <span id="date-text" aria-hidden="true"></span>
@@ -54,23 +54,22 @@
         <option value="booked">Booked only</option>
         <option value="open">Open only</option>
       </select>
+      <button class="btn btn--small" id="block-range">Block times&hellip;</button>
       <button class="btn btn--small" id="print">Print sheet</button>
       <button class="btn btn--small btn--danger" id="reset">Reset demo</button>
     </div>
   </div>
 
-  <h1 id="sheet-heading" class="nowrap" style="font-size:1.5rem"></h1>
+  <h1 id="sheet-heading" style="font-size:1.5rem"></h1>
 
   <div class="sheet-wrap" id="sheet">
     <table class="sheet">
-      <caption class="skip">Tee sheet for the selected day</caption>
+      <caption class="skip">Demo tee sheet for the selected day</caption>
       <thead>
         <tr>
           <th scope="col" style="width:6.5rem">Time</th>
-          <th scope="col" style="width:8rem">Status</th>
           <th scope="col">Players — four spots per tee time</th>
           <th scope="col" style="width:6.5rem">Fees</th>
-          <th scope="col" class="col-actions" style="width:8rem">Actions</th>
         </tr>
       </thead>
       <tbody id="rows"></tbody>
@@ -78,36 +77,33 @@
   </div>
 
   <div class="legend">
-    <span class="badge badge--open">Open</span>
-    <span class="badge badge--partial">Spots left</span>
-    <span class="badge badge--full">Full</span>
-    <span class="badge badge--in">Checked in</span>
-    <span class="badge badge--blocked">Blocked</span>
-    <span class="muted small no-print">Click a group to check in, cancel, or see details · click open space to add a booking</span>
+    <span class="swatch swatch--open">Open</span>
+    <span class="swatch">Booked</span>
+    <span class="swatch swatch--in">Checked in</span>
+    <span class="swatch swatch--blocked">Blocked</span>
+    <span class="muted small no-print">Click a group to check in, edit, move, or cancel · click open space to add a booking or block the time · click blocked space to unblock</span>
     <span class="muted small">Printed <span id="printed-at"></span></span>
   </div>
 
   <p class="small muted no-print" style="margin-top:1.5rem">
-    Tee times booked on the <a href="book.html">golfer booking page</a> appear here automatically.
-    Walk-ups and phone calls get added with <strong>Add booking</strong>. Blocking a time pulls it
-    off the public page — use it for maintenance, shotgun starts, and outings.
+    In the real product this sheet is yours: your course name, your tee times, your rates —
+    and it stays in sync across every device at the counter.
+    <a href="../signup.html">Set yours up free &rarr;</a>
   </p>
 
 </main>
 
-<!-- ================= Add / edit booking dialog ================= -->
+<!-- ================= Add / edit booking ================= -->
 <dialog id="booking-dialog">
   <form method="dialog" id="booking-form">
-    <div class="dialog__head" id="dialog-title">Add booking</div>
+    <div class="dialog__head" id="booking-title">Add booking</div>
     <div class="dialog__body">
-      <div class="error" id="dialog-error" hidden></div>
-      <p class="muted" style="margin-top:0" id="dialog-sub"></p>
-
+      <div class="error" id="booking-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="booking-sub"></p>
       <div class="field">
         <label for="d-name">Name</label>
         <input type="text" id="d-name" required>
       </div>
-
       <div class="grid">
         <div class="field">
           <label id="d-size-label">Players</label>
@@ -128,53 +124,109 @@
           </div>
         </div>
       </div>
-
       <div class="field">
         <label for="d-phone">Phone <span class="field__hint">— optional</span></label>
         <input type="tel" id="d-phone">
       </div>
-
       <div class="field">
         <label for="d-note">Note <span class="field__hint">— optional</span></label>
         <input type="text" id="d-note" placeholder="Member account, rentals, league play...">
       </div>
     </div>
     <div class="dialog__foot">
-      <button value="cancel" class="btn" type="button" id="dialog-cancel">Cancel</button>
-      <button value="save" class="btn btn--primary" type="submit">Save booking</button>
+      <button class="btn" type="button" id="booking-block" style="margin-right:auto">Block this time</button>
+      <button class="btn" type="button" id="booking-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="booking-save">Save booking</button>
     </div>
   </form>
 </dialog>
 
-<!-- ================= Group details dialog ================= -->
+<!-- ================= Group details ================= -->
 <dialog id="group-dialog">
   <div class="dialog__head" id="g-title">Booking</div>
   <div class="dialog__body">
+    <div class="error" id="g-error" hidden></div>
     <p class="muted" style="margin-top:0" id="g-sub"></p>
     <div class="lines" id="g-lines"></div>
   </div>
   <div class="dialog__foot">
     <button class="btn btn--danger" type="button" id="g-cancel-booking">Cancel booking</button>
+    <button class="btn" type="button" id="g-edit">Edit</button>
+    <button class="btn" type="button" id="g-move">Move&hellip;</button>
     <button class="btn" type="button" id="g-close">Close</button>
     <button class="btn btn--primary" type="button" id="g-checkin">Check in</button>
   </div>
 </dialog>
 
-<!-- ================= Block time dialog ================= -->
-<dialog id="block-dialog">
-  <form method="dialog" id="block-form">
-    <div class="dialog__head">Block tee time</div>
+<!-- ================= Move booking ================= -->
+<dialog id="move-dialog">
+  <form method="dialog" id="move-form">
+    <div class="dialog__head">Move booking</div>
     <div class="dialog__body">
-      <p class="muted" style="margin-top:0" id="block-sub"></p>
+      <div class="error" id="move-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="move-sub"></p>
       <div class="field">
-        <label for="b-reason">Reason</label>
-        <input type="text" id="b-reason" value="Course maintenance">
+        <label for="m-date">Move to which day?</label>
+        <input type="date" id="m-date">
       </div>
-      <p class="small muted">Blocking removes this time from the public booking page. Any group already on it will be cleared.</p>
+      <button class="btn" type="button" id="m-find">Find open times</button>
+      <div class="field" style="margin-top:1rem" id="m-times-field" hidden>
+        <label id="m-time-label">Open times</label>
+        <div id="m-times"></div>
+      </div>
     </div>
     <div class="dialog__foot">
-      <button class="btn" type="button" id="block-cancel">Cancel</button>
-      <button class="btn btn--primary" type="submit">Block time</button>
+      <button class="btn" type="button" id="move-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="move-save" disabled>Move booking</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= Blocked time (unblock) ================= -->
+<dialog id="block-dialog">
+  <div class="dialog__head">Blocked time</div>
+  <div class="dialog__body">
+    <div class="error" id="block-error" hidden></div>
+    <p class="muted" style="margin-top:0" id="block-sub"></p>
+    <p id="block-note" style="font-weight:700"></p>
+    <p class="small muted" style="margin-bottom:0">Groups already on this time stay either way. Unblocking reopens the empty space for booking.</p>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn" type="button" id="block-cancel">Close</button>
+    <button class="btn btn--primary" type="button" id="block-unblock">Unblock this time</button>
+  </div>
+</dialog>
+
+<!-- ================= Block a range ================= -->
+<dialog id="block-range-dialog">
+  <form method="dialog" id="br-form">
+    <div class="dialog__head">Block a stretch of times</div>
+    <div class="dialog__body">
+      <div class="error" id="br-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="br-sub"></p>
+      <div class="grid">
+        <div class="field">
+          <label for="br-from">From</label>
+          <select id="br-from"></select>
+        </div>
+        <div class="field">
+          <label for="br-to">Through</label>
+          <select id="br-to"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="br-reason">Reason</label>
+        <input type="text" id="br-reason" value="Course maintenance">
+      </div>
+      <div class="error" id="br-consequence" hidden></div>
+      <label id="br-confirm-wrap" style="display:flex;gap:.6rem;align-items:flex-start;font-weight:700" hidden>
+        <input type="checkbox" id="br-confirm" style="width:1.4rem;height:1.4rem;margin-top:.15rem">
+        <span id="br-confirm-text"></span>
+      </label>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="br-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="br-save">Block times</button>
     </div>
   </form>
 </dialog>

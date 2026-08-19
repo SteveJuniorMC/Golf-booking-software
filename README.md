@@ -1,97 +1,79 @@
-# Tee Time Booking — two part demo
+# YourTeeSheet
 
-A working demo of a simple tee time booking system for golf courses, in two halves:
+A free digital tee sheet for golf pro shops, live at **https://yourteesheet.web.app**.
 
-1. **`book.html` — the golfer booking page.** Pick a day, party size, and holes; see live
-   availability and pricing; book with a name, phone, and email; get a confirmation number.
-2. **`teesheet.html` — the pro shop tee sheet.** Every tee time for the day on one screen, with
-   online bookings and walk-ups together, check-in, cancellations, maintenance blocks, day
-   totals, and a clean print layout.
+A course pro signs up with an email and password, answers a five-minute setup wizard
+(tee times, green fees, time zone), takes a one-minute tour, and runs their daily tee
+sheet from the counter: walk-ups and phone bookings, check-ins, edits, moves,
+maintenance blocks, and a clean printout for the starter. The tee sheet is free
+forever; a golfer-facing online-booking add-on is planned as a separate paid product.
 
-`index.html` is the front door to send to a lead — it explains both halves and suggests a short
-walkthrough.
+## Stack
 
-The two halves share one data layer, so **a tee time booked on the public page shows up on the pro
-shop sheet**. That is the point of the demo.
+Plain HTML/JS/CSS — no build step, no npm. Firebase JS SDK v12.4.0 loaded as ES
+modules from the official CDN. Backend is Firebase: email/password Auth, Firestore
+with security rules, and Hosting (project `studio-6494679748-de621`, site
+`yourteesheet`).
 
-## Live demo
+## Pages
 
-Hosted on GitHub Pages at **https://stevejuniormc.github.io/Golf-booking-software/** — the leads
-you send the link to do not need an account. The workflow in `.github/workflows/pages.yml`
-redeploys on every push to `claude/golf-tee-booking-demo-pudsgd`, and Pages is configured with
-Source: GitHub Actions.
+| Page | What it is |
+| --- | --- |
+| `index.html` | Marketing landing page (loads no Firebase) |
+| `signup.html` / `login.html` / `reset.html` | Account pages |
+| `setup.html` | First-run course setup wizard (4 steps) |
+| `settings.html` | Everything from the wizard on one page, for quick edits |
+| `sheet.html` | The tee sheet app |
+| `demo/teesheet.html` | Public live demo of the sheet on seeded localStorage data |
 
-There is no real build. `scripts/build-site.sh` copies the pages and `assets/` into `_site/`, and
-the workflow uploads that directory. Staging an explicit list rather than publishing the repo root
-is what keeps this README, the workflow, and anything else in the repo off the public site — so if
-you add a page, add it to that script too or it will not ship.
+`demo/book.html` (the old golfer booking demo) is kept in the repo for the future
+booking add-on but is **not deployed** (see the hosting ignore list) and no longer
+matches `demo/assets/data.js`, which now uses the product's walk/ride rate model.
+The `mockups/` folder holds the pre-build design mockups; also not deployed.
 
-## Running it locally
+## JavaScript layout
 
-No build step, no dependencies, no server-side code. Either:
+- `js/lib/teetime.js` — pure helpers: dates, times, slot keys, pricing, `dayRows()`.
+- `js/firebase-init.js` — Firebase app/auth/db with offline persistence.
+- `js/guard.js` — page guards (auth required, setup required, bounce signed-in users).
+- `js/store.js` — TeeStore: live snapshot listeners plus transactional mutations
+  (book, edit, cancel, check-in, block/unblock, block range, move across days).
+- `js/sheet.js`, `js/setup.js`, `js/settings.js`, `js/auth-ui.js`, `js/tour.js` —
+  one controller per page; `js/tour.js` is the first-login overlay tour.
+
+## Data model
+
+One Firestore doc per course, keyed by the owner's auth uid; one doc per course per
+day, holding a `slots` map keyed `F09:40` / `B10:20` (front/back tee + time). Only
+slots with content exist. A slot is `{ blocked, note, groups[] }`; a blocked slot
+with groups means "no further bookings" — the groups stay. Every write is a
+transaction that re-checks capacity, so two counter devices can't oversell a time.
+Rules (`firestore.rules`) fence everything to the owning uid and type-check the
+course document.
+
+## Design rules
+
+Black on white, heavy borders, 18px+ system type, no decorative color. Color only
+carries meaning — green = open, gray = checked in, red = blocked — and every state
+is also written in words, so the sheet reads correctly in black-and-white print.
+No extreme bold weights (semibold for display type). The audience is course pros
+who may not be computer people: big buttons, plain words, dollar amounts instead of
+percentages.
+
+## Local development
 
 ```bash
-# recommended — full behaviour including saved changes
 python3 -m http.server 8000
-# then open http://localhost:8000
+# open http://localhost:8000
 ```
 
-or just double-click `index.html`. Opening the files straight from disk works, but some browsers
-block local storage on `file://` URLs, in which case changes are kept in memory only and are
-forgotten on reload. The tee sheet warns you when that happens.
+`localhost` is an authorized domain, so auth and Firestore work against the live
+project. Test with throwaway `stevejuniormc+tN@gmail.com` accounts and delete them
+(and their `courses/{uid}` docs) from the console afterwards.
 
-To send it to a lead, drop the folder on any static host (GitHub Pages, Netlify, S3) and share the
-link.
+## Deploy
 
-## Design
-
-Deliberately plain: black on white, heavy borders, large type, system fonts. Color appears only
-where it carries meaning — open, spots left, full, checked in, blocked — and every one of those
-states is labelled in words too, so the sheet still reads correctly in black and white and when
-printed.
-
-## Files
-
+```bash
+firebase deploy --only hosting            # the site
+firebase deploy --only firestore:rules    # security rules
 ```
-index.html            demo front door
-book.html             part 1 — golfer booking page
-teesheet.html         part 2 — pro shop tee sheet
-assets/base.css       shared stylesheet
-assets/data.js        shared data layer: course setup, pricing, demo bookings, storage
-assets/book.js        booking page behaviour
-assets/sheet.js       tee sheet behaviour
-scripts/build-site.sh stages the published files into _site/
-.github/workflows/pages.yml  deploys _site/ to GitHub Pages on push
-```
-
-## Demo data
-
-Bookings are generated from the date with a seeded random number generator, so the sheet looks the
-same every time you open it — prime morning times busy, twilight quiet, weekends fuller than
-weekdays. Anything you change during a demo is layered on top and saved in the browser.
-**Reset demo** on the tee sheet clears those changes and restores the starting sheet.
-
-## Configuring it for a specific course
-
-Everything a course would change first lives in the `COURSE` object at the top of
-`assets/data.js`:
-
-| Setting | What it controls |
-| --- | --- |
-| `name`, `tagline`, `phone` | Shown across both pages |
-| `firstTee`, `lastTee`, `intervalMinutes` | How many tee times a day exist (default 6:30 AM–6:00 PM, every 10 min) |
-| `slotSize` | Players per tee time (default 4) |
-| `rates.weekday18`, `rates.weekend18` | Base green fees |
-| `rates.nineHoleFactor` | 9 hole price as a share of 18 (default 0.6) |
-| `rates.twilightAfter`, `rates.twilightFactor` | When twilight starts and its discount |
-| `rates.cartPerPlayer` | Cart fee per player |
-| `policy` | Cancellation text shown to golfers |
-
-Change those values and both pages follow.
-
-## What a production version would add
-
-The demo intentionally stops short of the parts that need a backend. The next steps would be a
-server and database so bookings are shared across devices, payment capture, confirmation emails
-and SMS reminders, staff logins, member rates and recurring league blocks, and reporting across
-seasons.

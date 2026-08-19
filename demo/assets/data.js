@@ -24,13 +24,14 @@ window.TeeDemo = (function () {
     lastTee: '18:00',
     intervalMinutes: 10,
     slotSize: 4,
+    // Same shape as the product's rate grid: direct dollars per player,
+    // walking/riding priced separately. After the twilight hour everyone
+    // pays the twilight rate.
     rates: {
-      weekday18: 45,
-      weekend18: 65,
-      nineHoleFactor: 0.6,     // 9 holes costs 60% of the 18 hole rate
-      twilightAfter: '15:00',
-      twilightFactor: 0.7,     // 30% off after the twilight hour
-      cartPerPlayer: 18
+      eighteen: { weekdayWalk: 45, weekdayRide: 60, weekendWalk: 65, weekendRide: 80 },
+      nine:     { weekdayWalk: 25, weekdayRide: 35, weekendWalk: 35, weekendRide: 45 },
+      twilight: { enabled: true, after: '15:00',
+                  weekdayWalk: 30, weekdayRide: 40, weekendWalk: 40, weekendRide: 50 }
     },
     policy: 'Free cancellation up to 24 hours before your tee time. ' +
             'Please check in at the pro shop 20 minutes before you play.'
@@ -120,26 +121,25 @@ window.TeeDemo = (function () {
     return 'afternoon';
   }
 
-  /* ---------- Pricing ----------------------------------------------------- */
-
-  /** Green fee per player for one tee time. */
-  function greenFee(dateKey, time, holes) {
-    var r = COURSE.rates;
-    var price = isWeekend(dateKey) ? r.weekend18 : r.weekday18;
-    if (Number(holes) === 9) price = price * r.nineHoleFactor;
-    if (minutesOf(time) >= minutesOf(r.twilightAfter)) price = price * r.twilightFactor;
-    return Math.round(price);
-  }
+  /* ---------- Pricing (matches the product's rate model) ------------------ */
 
   function isTwilight(time) {
-    return minutesOf(time) >= minutesOf(COURSE.rates.twilightAfter);
+    var tw = COURSE.rates.twilight;
+    return !!tw.enabled && minutesOf(time) >= minutesOf(tw.after);
   }
 
-  /** Full cost of one group: green fees + carts. */
+  /** Green fee per player: twilight row after the hour, else 18/9 row;
+      weekday/weekend column by date; walking or riding by cart. */
+  function greenFee(dateKey, time, holes, cart) {
+    var r = COURSE.rates;
+    var row = isTwilight(time) ? r.twilight : (Number(holes) === 9 ? r.nine : r.eighteen);
+    if (isWeekend(dateKey)) return cart ? row.weekendRide : row.weekendWalk;
+    return cart ? row.weekdayRide : row.weekdayWalk;
+  }
+
+  /** Full cost of one group — riding is priced into the rate. */
   function groupTotal(dateKey, time, group) {
-    var fee = greenFee(dateKey, time, group.holes) * group.size;
-    if (group.cart) fee += COURSE.rates.cartPerPlayer * group.size;
-    return fee;
+    return greenFee(dateKey, time, group.holes, group.cart) * group.size;
   }
 
   function money(n) {
@@ -432,13 +432,81 @@ window.TeeDemo = (function () {
     });
   }
 
+  /** Close (or reopen) the unbooked space. Groups on the time always stay —
+      only blockRange removes groups, behind the sheet's confirmation. */
   function setBlocked(dateKey, time, blocked, note) {
     var slot = slotAt(dateKey, time);
     if (!slot) return;
     saveSlot(dateKey, time, {
       blocked: blocked,
-      note: blocked ? (note || 'Blocked by pro shop') : '',
-      groups: blocked ? [] : slot.groups
+      note: blocked ? (note || '') : '',
+      groups: slot.groups
+    });
+  }
+
+  /** Block every listed time on the day, clearing anything on them. */
+  function blockRange(dateKey, times, note) {
+    times.forEach(function (time) {
+      saveSlot(dateKey, time, { blocked: true, note: note || '', groups: [] });
+    });
+  }
+
+  /** Change a group's details in place; refuses if a bigger party won't fit. */
+  function editGroup(dateKey, time, groupId, changes) {
+    var slot = slotAt(dateKey, time);
+    if (!slot) throw new Error('That booking is no longer on this tee time.');
+    var group = null;
+    slot.groups.forEach(function (g) { if (g.id === groupId) group = g; });
+    if (!group) throw new Error('That booking is no longer on this tee time.');
+    var othersTaken = slot.players - group.size;
+    var newSize = Number(changes.size);
+    if (newSize > COURSE.slotSize - othersTaken) {
+      var room = COURSE.slotSize - othersTaken;
+      throw new Error('Only ' + room + ' spot' + (room === 1 ? '' : 's') +
+        ' on that tee time — a party of ' + newSize + " won't fit.");
+    }
+    saveSlot(dateKey, time, {
+      blocked: slot.blocked,
+      note: slot.note,
+      groups: slot.groups.map(function (g) {
+        return g.id !== groupId ? g : Object.assign({}, g, {
+          name: changes.name,
+          size: newSize,
+          holes: Number(changes.holes),
+          cart: !!changes.cart,
+          phone: changes.phone || '',
+          note: changes.note || ''
+        });
+      })
+    });
+  }
+
+  /** Move a group to another time, possibly on another day. */
+  function moveGroup(from, to) {
+    var fromSlot = slotAt(from.dateKey, from.time);
+    var group = null;
+    if (fromSlot) fromSlot.groups.forEach(function (g) { if (g.id === from.groupId) group = g; });
+    if (!group) throw new Error('That booking is no longer where it was.');
+
+    var toSlot = slotAt(to.dateKey, to.time);
+    if (!toSlot) throw new Error('That tee time is not on the sheet.');
+    if (toSlot.blocked) throw new Error('That tee time is blocked.');
+    if (group.size > toSlot.open) {
+      throw new Error('Only ' + toSlot.open + ' spot' + (toSlot.open === 1 ? '' : 's') +
+        ' left on that tee time.');
+    }
+
+    saveSlot(from.dateKey, from.time, {
+      blocked: fromSlot.blocked,
+      note: fromSlot.note,
+      groups: fromSlot.groups.filter(function (g) { return g.id !== from.groupId; })
+    });
+    // Re-read in case the move stays on the same day (store just changed).
+    var freshTo = slotAt(to.dateKey, to.time);
+    saveSlot(to.dateKey, to.time, {
+      blocked: false,
+      note: freshTo.note,
+      groups: freshTo.groups.concat([group])
     });
   }
 
@@ -507,6 +575,9 @@ window.TeeDemo = (function () {
     cancelGroup: cancelGroup,
     setGroupStatus: setGroupStatus,
     setBlocked: setBlocked,
+    blockRange: blockRange,
+    editGroup: editGroup,
+    moveGroup: moveGroup,
     totals: totals,
     reset: reset,
     storageWorks: storageWorks,
