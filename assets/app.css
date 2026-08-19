@@ -336,13 +336,11 @@ table.sheet th:last-child { border-right: 0; }
 
 td.col-time {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 600;
   white-space: nowrap;
 }
 tr.row--hour td { border-top: 3px solid var(--ink); }
-tr.row--open td.col-time { color: var(--muted); }
 tr.row--blocked { background: var(--fill); }
-tr.row--blocked td.col-time { text-decoration: line-through; }
 tr.row--full { background: var(--fill); }
 
 /* Player spots: every tee time renders as the same four-column strip — one
@@ -387,7 +385,7 @@ tr.row--full { background: var(--fill); }
 }
 .spot__name {
   display: block;
-  font-weight: 800;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -650,17 +648,6 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
 .cta-band a { color: var(--paper); }
 .cta-band a:hover { background: #333; }
 .cta-band .btn-row { justify-content: center; margin-top: 1.25rem; align-items: center; gap: 1rem 1.5rem; }
-
-/* ---------- Landing-only refinement (body.landing) ----------
-   Headlines use the same system sans as everything else, one notch lighter
-   than full bold — semibold keeps the counters open at display sizes. */
-
-.landing h1,
-.landing h2,
-.landing h3,
-.landing .wordmark {
-  font-weight: 600;
-}
 
 /* ---------- Auth + wizard shells ---------- */
 
