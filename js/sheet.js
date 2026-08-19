@@ -202,11 +202,13 @@ function renderTwoTees(past) {
   const frontRows = T.dayRows(course, state.dateKey, state.dayData, 'F');
   const backRows = T.dayRows(course, state.dateKey, state.dayData, 'B');
 
+  // The front nine keeps the bigger share on purpose; pinning the back
+  // nine's share stops the table from squeezing it to almost nothing.
   el.thead.innerHTML = '<tr>' +
     '<th scope="col" style="width:6.5rem">Time</th>' +
-    '<th scope="col">Front nine — 1st tee</th>' +
+    '<th scope="col" style="width:46%">Front nine — 1st tee</th>' +
     '<th scope="col" style="width:6.5rem">Fees</th>' +
-    '<th scope="col">Back nine — 10th tee</th>' +
+    '<th scope="col" style="width:34%">Back nine — 10th tee</th>' +
     '<th scope="col" style="width:6.5rem">Fees</th></tr>';
 
   let lastHour = null;
