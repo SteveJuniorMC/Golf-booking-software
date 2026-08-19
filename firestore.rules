@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// One login = one course: the course document's ID is the owner's auth uid,
+// and that fence is the entire security model. Course-level fields are
+// type-checked; slot/group internals are not deep-validated because the
+// owner is the only reader of their own data.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedInAs(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function isHHMM(v) {
+      return v is string && v.matches('^([01][0-9]|2[0-3]):[0-5][0-9]$');
+    }
+
+    // Four walk/ride × weekday/weekend prices, dollars, not negative.
+    function validPrices(m) {
+      return m.weekdayWalk is number && m.weekdayWalk >= 0
+          && m.weekdayRide is number && m.weekdayRide >= 0
+          && m.weekendWalk is number && m.weekendWalk >= 0
+          && m.weekendRide is number && m.weekendRide >= 0;
+    }
+
+    function validRates(r) {
+      return validPrices(r.eighteen)
+          && validPrices(r.nine)
+          && r.twilight.enabled is bool
+          && isHHMM(r.twilight.after)
+          && validPrices(r.twilight);
+    }
+
+    function validCourse(c) {
+      return c.name is string && c.name.size() > 0 && c.name.size() <= 100
+          && c.phone is string && c.phone.size() <= 40
+          && c.timezone is string && c.timezone.size() > 0 && c.timezone.size() <= 60
+          && isHHMM(c.firstTee) && isHHMM(c.lastTee)
+          && c.intervalMinutes is int && c.intervalMinutes >= 5 && c.intervalMinutes <= 30
+          && c.slotSize is int && c.slotSize >= 1 && c.slotSize <= 6
+          && c.backNine is bool
+          && c.setupComplete is bool
+          && c.tourDone is bool
+          && validRates(c.rates);
+    }
+
+    match /courses/{uid} {
+      allow read: if signedInAs(uid);
+      allow create: if signedInAs(uid) && validCourse(request.resource.data);
+      allow update: if signedInAs(uid) && validCourse(request.resource.data);
+      allow delete: if false;
+
+      match /days/{dateKey} {
+        allow read: if signedInAs(uid);
+        allow write: if signedInAs(uid)
+            && dateKey.matches('^\\d{4}-\\d{2}-\\d{2}$')
+            && request.resource.data.keys().hasOnly(['slots', 'updatedAt'])
+            && request.resource.data.slots is map;
+        allow delete: if signedInAs(uid);
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

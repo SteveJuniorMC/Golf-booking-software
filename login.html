@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — YourTeeSheet</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="./">YourTeeSheet</a>
+    <nav class="site-nav">
+      <a class="btn btn--primary" href="signup.html">Get started free</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell-narrow">
+  <div class="big-card">
+    <h1>Sign in</h1>
+    <div class="error" id="error" hidden></div>
+    <form id="login-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn--primary btn--block" type="submit" id="submit" style="font-size:1.1rem">Sign in</button>
+    </form>
+  </div>
+  <div class="auth-links">
+    <p><a href="reset.html">Forgot your password?</a></p>
+    <p>New here? <a href="signup.html">Create your free account</a></p>
+  </div>
+</main>
+
+<script type="module">
+  import { redirectIfSignedIn } from './js/guard.js';
+  import { wireLogin } from './js/auth-ui.js';
+  redirectIfSignedIn();
+  wireLogin(
+    document.getElementById('login-form'),
+    document.getElementById('email'),
+    document.getElementById('password'),
+    document.getElementById('error'),
+    document.getElementById('submit')
+  );
+</script>
+</body>
+</html>

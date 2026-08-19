@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course setup — YourTeeSheet</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="./">YourTeeSheet</a>
+    <span class="masthead__sub">Setting up your course</span>
+  </div>
+</header>
+
+<main class="shell-mid">
+  <!-- Placeholder: the real 4-step wizard from the approved mockups lands here
+       in the next build phase. This page only proves the signup flow works. -->
+  <div class="big-card">
+    <div class="kicker">Course setup</div>
+    <h1>Your account is ready</h1>
+    <p class="lede">The course setup wizard is being built right now — this is where it will live.
+       Your account works: you can sign out and back in with your email and password.</p>
+    <div class="btn-row">
+      <button class="btn" id="signout" type="button">Sign out</button>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { auth } from './js/firebase-init.js';
+  import { requireAuth } from './js/guard.js';
+  import { signOut } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
+  requireAuth(function () {});
+  document.getElementById('signout').addEventListener('click', async function () {
+    await signOut(auth);
+    window.location.replace('login.html');
+  });
+</script>
+</body>
+</html>

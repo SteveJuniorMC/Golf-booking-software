@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset your password — YourTeeSheet</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="./">YourTeeSheet</a>
+    <nav class="site-nav">
+      <a href="login.html">Sign in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell-narrow">
+  <div class="big-card">
+    <h1>Reset your password</h1>
+    <div class="error" id="error" hidden></div>
+    <form id="reset-form">
+      <p>Type the email you signed up with and we'll send a link that lets you pick a new password.</p>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" required>
+      </div>
+      <button class="btn btn--primary btn--block" type="submit" id="submit" style="font-size:1.1rem">Send the reset link</button>
+    </form>
+    <div id="sent" hidden>
+      <p style="margin-bottom:0"><strong>If that address has an account, a reset link is on its way.</strong> Check your inbox — and the spam folder, just in case. The link works for one hour.</p>
+    </div>
+  </div>
+  <div class="auth-links">
+    <p>Remembered it after all? <a href="login.html">Sign in</a></p>
+  </div>
+</main>
+
+<script type="module">
+  import { redirectIfSignedIn } from './js/guard.js';
+  import { wireReset } from './js/auth-ui.js';
+  redirectIfSignedIn();
+  wireReset(
+    document.getElementById('reset-form'),
+    document.getElementById('email'),
+    document.getElementById('error'),
+    document.getElementById('sent'),
+    document.getElementById('submit')
+  );
+</script>
+</body>
+</html>

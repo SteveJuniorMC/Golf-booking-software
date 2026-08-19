@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tee Sheet — YourTeeSheet</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<!-- Placeholder: the real tee sheet from the approved mockups lands here in a
+     later build phase. For now this page only enforces the guards: signed-out
+     visitors go to login, accounts without a finished course go to setup. -->
+
+<main class="shell-narrow">
+  <div class="big-card">
+    <h1>Loading your tee sheet…</h1>
+    <p class="muted">If you see this for more than a moment, something is wrong — tell us.</p>
+  </div>
+</main>
+
+<script type="module">
+  import { requireAuth, requireCourse } from './js/guard.js';
+  requireAuth(async function (user) {
+    const course = await requireCourse(user.uid);
+    if (course) {
+      document.querySelector('h1').textContent = course.name + ' — sheet coming soon';
+    }
+  });
+</script>
+</body>
+</html>
