@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course settings — YourTeeSheet</title>
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="./">YourTeeSheet</a>
+    <nav class="site-nav">
+      <a href="sheet.html">&larr; Back to the tee sheet</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell-mid">
+  <div class="big-card">
+    <h1>Course settings</h1>
+    <p class="muted">Everything in one place. Changes take effect on your sheet the moment you save.</p>
+    <div class="error" id="error" hidden></div>
+    <form id="settings-form" novalidate>
+
+      <h2>Your course</h2>
+      <div class="field">
+        <label for="c-name">Course name</label>
+        <input type="text" id="c-name" maxlength="100">
+      </div>
+      <div class="field">
+        <label for="c-phone">Pro shop phone <span class="field__hint">— optional</span></label>
+        <input type="tel" id="c-phone" maxlength="40">
+      </div>
+
+      <hr class="hr">
+      <h2>Tee times</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="t-first">First tee time</label>
+          <input type="time" id="t-first">
+        </div>
+        <div class="field">
+          <label for="t-last">Last tee time</label>
+          <input type="time" id="t-last">
+        </div>
+      </div>
+      <div class="field">
+        <label id="interval-label">Minutes between tee times</label>
+        <div class="choices" role="radiogroup" aria-labelledby="interval-label">
+          <label class="choice"><input type="radio" name="interval" value="8"><span>8</span></label>
+          <label class="choice"><input type="radio" name="interval" value="9"><span>9</span></label>
+          <label class="choice"><input type="radio" name="interval" value="10"><span>10</span></label>
+          <label class="choice"><input type="radio" name="interval" value="12"><span>12</span></label>
+          <label class="choice"><input type="radio" name="interval" value="15"><span>15</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="slot-label">Players per tee time</label>
+        <div class="choices" role="radiogroup" aria-labelledby="slot-label">
+          <label class="choice"><input type="radio" name="slot" value="3"><span>3</span></label>
+          <label class="choice"><input type="radio" name="slot" value="4"><span>4</span></label>
+          <label class="choice"><input type="radio" name="slot" value="5"><span>5</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="bn-label">Back-nine starts</label>
+        <div class="choices" role="radiogroup" aria-labelledby="bn-label">
+          <label class="choice"><input type="radio" name="bn" value="no"><span>No</span></label>
+          <label class="choice"><input type="radio" name="bn" value="yes"><span>Yes</span></label>
+        </div>
+        <p class="field__hint" style="margin:.3rem 0 0">Turn this on if you send groups off the 10th tee. Your sheet gets a second strip per time.</p>
+      </div>
+      <p id="count-line"><strong></strong> <span class="muted"></span></p>
+
+      <hr class="hr">
+      <h2>Green fees</h2>
+      <p>Per player, in dollars — the same numbers that are on the rate board in your shop.</p>
+      <div class="rate-grid-wrap">
+        <table class="rate-grid">
+          <thead>
+            <tr><th></th><th colspan="2">Weekday</th><th colspan="2">Weekend</th></tr>
+            <tr><th></th><th>Walking</th><th>Riding</th><th>Walking</th><th>Riding</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rate-grid__row">18 holes</td>
+              <td><span class="money">$<input type="number" id="r-eighteen-weekdayWalk" min="0" step="1" aria-label="18 holes, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-eighteen-weekdayRide" min="0" step="1" aria-label="18 holes, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" id="r-eighteen-weekendWalk" min="0" step="1" aria-label="18 holes, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-eighteen-weekendRide" min="0" step="1" aria-label="18 holes, weekend, riding"></span></td>
+            </tr>
+            <tr>
+              <td class="rate-grid__row">9 holes</td>
+              <td><span class="money">$<input type="number" id="r-nine-weekdayWalk" min="0" step="1" aria-label="9 holes, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-nine-weekdayRide" min="0" step="1" aria-label="9 holes, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" id="r-nine-weekendWalk" min="0" step="1" aria-label="9 holes, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-nine-weekendRide" min="0" step="1" aria-label="9 holes, weekend, riding"></span></td>
+            </tr>
+            <tr id="twilight-row">
+              <td class="rate-grid__row">Twilight</td>
+              <td><span class="money">$<input type="number" id="r-twilight-weekdayWalk" min="0" step="1" aria-label="Twilight, weekday, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-twilight-weekdayRide" min="0" step="1" aria-label="Twilight, weekday, riding"></span></td>
+              <td><span class="money">$<input type="number" id="r-twilight-weekendWalk" min="0" step="1" aria-label="Twilight, weekend, walking"></span></td>
+              <td><span class="money">$<input type="number" id="r-twilight-weekendRide" min="0" step="1" aria-label="Twilight, weekend, riding"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:.75rem" id="twilight-hint">After the twilight time, everyone pays the twilight rate.</p>
+      <div class="grid" style="margin-top:.5rem">
+        <div class="field" id="twilight-after-field">
+          <label for="t-twilight">Twilight starts at</label>
+          <input type="time" id="t-twilight">
+        </div>
+        <div class="field">
+          <label id="tw-label">Twilight rate</label>
+          <div class="choices" role="radiogroup" aria-labelledby="tw-label">
+            <label class="choice"><input type="radio" name="tw" value="yes"><span>We have one</span></label>
+            <label class="choice"><input type="radio" name="tw" value="no"><span>We don't have a twilight rate</span></label>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr">
+      <h2>Time zone</h2>
+      <div class="field">
+        <label for="c-tz">Your course's time zone</label>
+        <select id="c-tz"></select>
+        <p class="field__hint" style="margin:.3rem 0 0"><strong id="tz-now"></strong> If that's wrong, pick a different zone.</p>
+      </div>
+
+      <div class="form-foot">
+        <a class="btn" href="sheet.html">Cancel</a>
+        <button class="btn btn--primary" type="submit" id="save" style="font-size:1.05rem">Save changes</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script type="module" src="js/settings.js"></script>
+</body>
+</html>

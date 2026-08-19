@@ -34,8 +34,6 @@ const PINNED_ZONES = [
 const STEP_LABELS = ['', 'Next: tee times →', 'Next: green fees →', 'Next: time zone →', ''];
 
 let step = 1;
-let mode = 'new';           // 'new' | 'settings'
-let existing = null;        // the current course doc data in settings mode
 let uid = null;
 
 const el = {
@@ -154,15 +152,13 @@ function goto(n) {
   for (const s of sections) s.hidden = Number(s.dataset.step) !== n;
   el.back.hidden = n === 1;
   if (n === 4) {
-    el.next.textContent = mode === 'settings' ? 'Save changes' : 'Finish setup — open my tee sheet';
+    el.next.textContent = 'Finish setup — open my tee sheet';
     renderReview();
     tickClock();
   } else {
     el.next.textContent = STEP_LABELS[n];
   }
-  el.kicker.textContent = mode === 'settings'
-    ? 'Course settings · Step ' + n + ' of 4'
-    : 'Course setup · Step ' + n + ' of 4';
+  el.kicker.textContent = 'Course setup · Step ' + n + ' of 4';
   el.error.hidden = true;
   window.scrollTo(0, 0);
 }
@@ -273,13 +269,8 @@ function prefill(c) {
 async function save() {
   const c = readCourse();
   c.updatedAt = serverTimestamp();
-  if (mode === 'settings') {
-    c.createdAt = existing.createdAt || serverTimestamp();
-    c.tourDone = existing.tourDone === true;
-  } else {
-    c.createdAt = serverTimestamp();
-    c.tourDone = false;
-  }
+  c.createdAt = serverTimestamp();
+  c.tourDone = false;
   await setDoc(doc(db, 'courses', uid), c);
   window.location.replace('sheet.html');
 }
@@ -290,14 +281,12 @@ requireAuth(async function (user) {
   uid = user.uid;
   const snap = await getDoc(doc(db, 'courses', uid));
   if (snap.exists() && snap.data().setupComplete === true) {
-    mode = 'settings';
-    existing = snap.data();
-    el.headerSub.textContent = 'Course settings';
-    prefill(existing);
-  } else {
-    prefill({ rates: DEFAULT_RATES });
+    // Setup is done — quick edits happen on the settings page instead.
+    window.location.replace('settings.html');
+    return;
   }
-  fillTimezones((existing && existing.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone);
+  prefill({ rates: DEFAULT_RATES });
+  fillTimezones(Intl.DateTimeFormat().resolvedOptions().timeZone);
   updateCountLine();
   updateTwilightVisibility();
   goto(1);
