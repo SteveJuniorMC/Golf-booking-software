@@ -12,33 +12,144 @@
 <header class="site-header">
   <div class="wrap">
     <a class="wordmark" href="./">YourTeeSheet</a>
-    <span class="masthead__sub">Setting up your course</span>
+    <span class="masthead__sub" id="header-sub">Setting up your course</span>
   </div>
 </header>
 
 <main class="shell-mid">
-  <!-- Placeholder: the real 4-step wizard from the approved mockups lands here
-       in the next build phase. This page only proves the signup flow works. -->
   <div class="big-card">
-    <div class="kicker">Course setup</div>
-    <h1>Your account is ready</h1>
-    <p class="lede">The course setup wizard is being built right now — this is where it will live.
-       Your account works: you can sign out and back in with your email and password.</p>
-    <div class="btn-row">
-      <button class="btn" id="signout" type="button">Sign out</button>
-    </div>
+    <div class="kicker" id="kicker">Course setup · Step 1 of 4</div>
+    <div class="error" id="error" hidden></div>
+    <form id="wizard" novalidate>
+
+      <!-- ============ Step 1: your course ============ -->
+      <section data-step="1">
+        <h1>Your course</h1>
+        <div class="field">
+          <label for="c-name">Course name</label>
+          <input type="text" id="c-name" maxlength="100">
+          <p class="field__hint" style="margin:.3rem 0 0">Shown at the top of your tee sheet and on everything you print.</p>
+        </div>
+        <div class="field">
+          <label for="c-phone">Pro shop phone <span class="field__hint">— optional</span></label>
+          <input type="tel" id="c-phone" maxlength="40">
+        </div>
+      </section>
+
+      <!-- ============ Step 2: tee times ============ -->
+      <section data-step="2" hidden>
+        <h1>Tee times</h1>
+        <div class="grid">
+          <div class="field">
+            <label for="t-first">First tee time</label>
+            <input type="time" id="t-first" value="06:30">
+          </div>
+          <div class="field">
+            <label for="t-last">Last tee time</label>
+            <input type="time" id="t-last" value="18:00">
+          </div>
+        </div>
+        <div class="field">
+          <label id="interval-label">Minutes between tee times</label>
+          <div class="choices" role="radiogroup" aria-labelledby="interval-label">
+            <label class="choice"><input type="radio" name="interval" value="8"><span>8</span></label>
+            <label class="choice"><input type="radio" name="interval" value="9"><span>9</span></label>
+            <label class="choice"><input type="radio" name="interval" value="10" checked><span>10</span></label>
+            <label class="choice"><input type="radio" name="interval" value="12"><span>12</span></label>
+            <label class="choice"><input type="radio" name="interval" value="15"><span>15</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="slot-label">Players per tee time</label>
+          <div class="choices" role="radiogroup" aria-labelledby="slot-label">
+            <label class="choice"><input type="radio" name="slot" value="3"><span>3</span></label>
+            <label class="choice"><input type="radio" name="slot" value="4" checked><span>4</span></label>
+            <label class="choice"><input type="radio" name="slot" value="5"><span>5</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="bn-label">Back-nine starts</label>
+          <div class="choices" role="radiogroup" aria-labelledby="bn-label">
+            <label class="choice"><input type="radio" name="bn" value="no" checked><span>No</span></label>
+            <label class="choice"><input type="radio" name="bn" value="yes"><span>Yes</span></label>
+          </div>
+          <p class="field__hint" style="margin:.3rem 0 0">Turn this on if you send groups off the 10th tee. Your sheet gets a second strip per time.</p>
+        </div>
+        <p id="count-line"><strong></strong> <span class="muted"></span></p>
+      </section>
+
+      <!-- ============ Step 3: green fees ============ -->
+      <section data-step="3" hidden>
+        <h1>Green fees</h1>
+        <p>Per player, in dollars — the same numbers that are on the rate board in your shop.</p>
+        <div class="rate-grid-wrap">
+          <table class="rate-grid">
+            <thead>
+              <tr><th></th><th colspan="2">Weekday</th><th colspan="2">Weekend</th></tr>
+              <tr><th></th><th>Walking</th><th>Riding</th><th>Walking</th><th>Riding</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="rate-grid__row">18 holes</td>
+                <td><span class="money">$<input type="number" id="r-eighteen-weekdayWalk" min="0" step="1" aria-label="18 holes, weekday, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-eighteen-weekdayRide" min="0" step="1" aria-label="18 holes, weekday, riding"></span></td>
+                <td><span class="money">$<input type="number" id="r-eighteen-weekendWalk" min="0" step="1" aria-label="18 holes, weekend, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-eighteen-weekendRide" min="0" step="1" aria-label="18 holes, weekend, riding"></span></td>
+              </tr>
+              <tr>
+                <td class="rate-grid__row">9 holes</td>
+                <td><span class="money">$<input type="number" id="r-nine-weekdayWalk" min="0" step="1" aria-label="9 holes, weekday, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-nine-weekdayRide" min="0" step="1" aria-label="9 holes, weekday, riding"></span></td>
+                <td><span class="money">$<input type="number" id="r-nine-weekendWalk" min="0" step="1" aria-label="9 holes, weekend, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-nine-weekendRide" min="0" step="1" aria-label="9 holes, weekend, riding"></span></td>
+              </tr>
+              <tr id="twilight-row">
+                <td class="rate-grid__row">Twilight</td>
+                <td><span class="money">$<input type="number" id="r-twilight-weekdayWalk" min="0" step="1" aria-label="Twilight, weekday, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-twilight-weekdayRide" min="0" step="1" aria-label="Twilight, weekday, riding"></span></td>
+                <td><span class="money">$<input type="number" id="r-twilight-weekendWalk" min="0" step="1" aria-label="Twilight, weekend, walking"></span></td>
+                <td><span class="money">$<input type="number" id="r-twilight-weekendRide" min="0" step="1" aria-label="Twilight, weekend, riding"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted" style="margin-top:.75rem" id="twilight-hint">After the twilight time, everyone pays the twilight rate.</p>
+        <div class="grid" style="margin-top:.5rem">
+          <div class="field" id="twilight-after-field">
+            <label for="t-twilight">Twilight starts at</label>
+            <input type="time" id="t-twilight" value="15:00">
+          </div>
+          <div class="field">
+            <label id="tw-label">Twilight rate</label>
+            <div class="choices" role="radiogroup" aria-labelledby="tw-label">
+              <label class="choice"><input type="radio" name="tw" value="yes" checked><span>We have one</span></label>
+              <label class="choice"><input type="radio" name="tw" value="no"><span>We don't have a twilight rate</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Step 4: time zone + review ============ -->
+      <section data-step="4" hidden>
+        <h1>Time zone, then a last look</h1>
+        <div class="field">
+          <label for="c-tz">Your course's time zone</label>
+          <select id="c-tz"></select>
+          <p class="field__hint" style="margin:.3rem 0 0"><strong id="tz-now"></strong> If that's wrong, pick a different zone.</p>
+        </div>
+        <h2 style="margin-top:1.5rem">Everything you told us</h2>
+        <div class="lines" id="review"></div>
+        <p class="small muted" style="margin-top:.75rem">You can change any of this later — there's a Settings button on your tee sheet.</p>
+      </section>
+
+      <div class="form-foot">
+        <button class="btn" type="button" id="back" hidden>&larr; Back</button>
+        <button class="btn btn--primary" type="submit" id="next" style="font-size:1.05rem">Next: tee times &rarr;</button>
+      </div>
+    </form>
   </div>
 </main>
 
-<script type="module">
-  import { auth } from './js/firebase-init.js';
-  import { requireAuth } from './js/guard.js';
-  import { signOut } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
-  requireAuth(function () {});
-  document.getElementById('signout').addEventListener('click', async function () {
-    await signOut(auth);
-    window.location.replace('login.html');
-  });
-</script>
+<script type="module" src="js/setup.js"></script>
 </body>
 </html>

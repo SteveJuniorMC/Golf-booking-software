@@ -181,6 +181,9 @@ input[type="text"],
 input[type="email"],
 input[type="tel"],
 input[type="number"],
+input[type="password"],
+input[type="time"],
+input[type="date"],
 select,
 textarea {
   font: inherit;
