@@ -768,30 +768,8 @@ table.rate-grid { border-collapse: collapse; width: 100%; }
   .bn-narrow { display: revert !important; }
 }
 
-.tee-cell { min-width: 21rem; }
-
-/* Spots, fees, and the block action share one line, keeping two-tee rows
-   exactly as tall as single-tee rows. Fees and action zones are fixed
-   width — and always present — so the spots grid lines up in every row. */
-.tee-cell__flex {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-}
-.tee-cell__flex .spots { flex: 1; min-width: 16rem; }
-.tee-cell__fees {
-  flex: none;
-  width: 4.8rem;
-  text-align: right;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.tee-cell__action { flex: none; width: 6rem; }
-.tee-cell__action .btn {
-  width: 100%;
-  padding-left: .2rem;
-  padding-right: .2rem;
-}
+.tee-cell { min-width: 19rem; }
+.tee-cell .spots { min-width: 0; }
 
 /* The toggled single-tee view names the tee right under the time. */
 .col-time__tee {
@@ -803,7 +781,12 @@ table.rate-grid { border-collapse: collapse; width: 100%; }
   color: var(--muted);
 }
 
+/* A blocked chip is clickable (to unblock) on days that aren't over. */
+button.spot--blocked { cursor: pointer; }
+button.spot--blocked:hover { background: #f5d9d9; }
+
 /* Still used by the static mockup pages. */
+.tee-cell__fees { margin-left: auto; font-weight: 700; white-space: nowrap; }
 .tee-cell__head {
   display: flex;
   align-items: center;

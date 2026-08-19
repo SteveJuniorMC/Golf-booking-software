@@ -23,7 +23,7 @@ function steps(backNine) {
     { target: '#filter', title: 'Cut the noise.',
       body: "Show booked-only when you're working the day, open-only when someone's on the phone." },
     { target: '#block-range', title: 'Block times.',
-      body: 'Maintenance, leagues, outings: block one time from its row, or a whole stretch with Block times.' },
+      body: 'Frost delay, maintenance, an outing: click an open space and press Block this time, or close a whole stretch with Block times up here.' },
     { target: '#print', title: 'Paper still works.',
       body: 'Print puts a clean copy on the counter for the starter.' },
     { target: '#help', title: "That's the whole tour.",

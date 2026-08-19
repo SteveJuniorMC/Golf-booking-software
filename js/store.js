@@ -159,13 +159,21 @@ export async function setGroupStatus(dateKey, tee, time, groupId, status) {
   });
 }
 
+/**
+ * Close (or reopen) the unbooked space on one tee time. Groups already on
+ * the time are never touched — a block with groups on it just stops any
+ * further bookings. Only blockRange() removes groups, behind its own
+ * confirmation.
+ */
 export async function setBlocked(dateKey, tee, time, blocked, note) {
   const key = slotKey(tee, time);
   await withDay(dateKey, function (slots) {
+    const slot = slots[key] || emptySlot();
     if (blocked) {
-      slots[key] = { blocked: true, note: note || 'Blocked by the pro shop', groups: [] };
+      slots[key] = { blocked: true, note: note || '', groups: slot.groups || [] };
     } else {
-      delete slots[key];
+      slots[key] = { blocked: false, note: '', groups: slot.groups || [] };
+      compact(slots, key);
     }
   });
 }

@@ -73,7 +73,7 @@
     <span class="swatch">Booked</span>
     <span class="swatch swatch--in">Checked in</span>
     <span class="swatch swatch--blocked">Blocked</span>
-    <span class="muted small no-print">Click a group to check in, edit, move, or cancel · click open space to add a booking</span>
+    <span class="muted small no-print">Click a group to check in, edit, move, or cancel · click open space to add a booking or block the time · click blocked space to unblock</span>
     <span class="muted small">Printed <span id="printed-at"></span></span>
   </div>
 
@@ -120,6 +120,7 @@
       </div>
     </div>
     <div class="dialog__foot">
+      <button class="btn" type="button" id="booking-block" style="margin-right:auto">Block this time</button>
       <button class="btn" type="button" id="booking-cancel">Cancel</button>
       <button class="btn btn--primary" type="submit" id="booking-save">Save booking</button>
     </div>
@@ -176,24 +177,19 @@
   </form>
 </dialog>
 
-<!-- ================= Block one time ================= -->
+<!-- ================= Blocked time (unblock) ================= -->
 <dialog id="block-dialog">
-  <form method="dialog" id="block-form">
-    <div class="dialog__head">Block tee time</div>
-    <div class="dialog__body">
-      <div class="error" id="block-error" hidden></div>
-      <p class="muted" style="margin-top:0" id="block-sub"></p>
-      <div class="field">
-        <label for="b-reason">Reason</label>
-        <input type="text" id="b-reason" value="Course maintenance">
-      </div>
-      <p class="small muted">Blocked times can't be booked. Unblock any time from the sheet.</p>
-    </div>
-    <div class="dialog__foot">
-      <button class="btn" type="button" id="block-cancel">Cancel</button>
-      <button class="btn btn--primary" type="submit">Block time</button>
-    </div>
-  </form>
+  <div class="dialog__head">Blocked time</div>
+  <div class="dialog__body">
+    <div class="error" id="block-error" hidden></div>
+    <p class="muted" style="margin-top:0" id="block-sub"></p>
+    <p id="block-note" style="font-weight:700"></p>
+    <p class="small muted" style="margin-bottom:0">Groups already on this time stay either way. Unblocking reopens the empty space for booking.</p>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn" type="button" id="block-cancel">Close</button>
+    <button class="btn btn--primary" type="button" id="block-unblock">Unblock this time</button>
+  </div>
 </dialog>
 
 <!-- ================= Block a range ================= -->

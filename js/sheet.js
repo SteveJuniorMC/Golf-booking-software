@@ -37,7 +37,7 @@ for (const id of ['course-name', 'user-email', 'course-phone', 'course-phone-wra
   'group-dialog', 'g-title', 'g-error', 'g-sub', 'g-lines', 'g-cancel-booking', 'g-edit', 'g-move', 'g-checkin',
   'move-dialog', 'move-form', 'move-error', 'move-sub', 'm-date', 'm-tee-field', 'm-find',
   'm-times-field', 'm-times', 'move-save',
-  'block-dialog', 'block-form', 'block-error', 'block-sub', 'b-reason',
+  'booking-block', 'block-dialog', 'block-error', 'block-sub', 'block-note', 'block-unblock',
   'block-range-dialog', 'br-form', 'br-error', 'br-sub', 'br-tee-field', 'br-from', 'br-to',
   'br-reason', 'br-consequence', 'br-confirm-wrap', 'br-confirm', 'br-confirm-text', 'br-save']) {
   el[id] = document.getElementById(id);
@@ -162,8 +162,7 @@ function renderOneTee(tee, past) {
     '<th scope="col" style="width:6.5rem">Time</th>' +
     '<th scope="col">' + (state.course.backNine ? esc(teeName(tee)) : 'Players') +
       ' — ' + state.course.slotSize + ' spots per tee time</th>' +
-    '<th scope="col" style="width:6.5rem">Fees</th>' +
-    '<th scope="col" class="col-actions" style="width:8rem">Actions</th></tr>';
+    '<th scope="col" style="width:6.5rem">Fees</th></tr>';
 
   const visible = rows.filter(rowPassesFilter);
   let lastHour = null;
@@ -172,33 +171,29 @@ function renderOneTee(tee, past) {
     const newHour = hour !== lastHour;
     lastHour = hour;
     return renderRow(row, tee, newHour, past);
-  }).join('') || noMatchRow(4);
+  }).join('') || noMatchRow(3);
+}
+
+function rowClasses(row, newHour) {
+  const classes = ['row'];
+  if (newHour) classes.push('row--hour');
+  if (row.blocked && row.players === 0) classes.push('row--blocked');
+  else if (row.open === 0 && row.players > 0) classes.push('row--full');
+  else if (!row.blocked && row.players === 0) classes.push('row--open');
+  return classes.join(' ');
 }
 
 function renderRow(row, tee, newHour, past) {
-  const classes = ['row'];
-  if (newHour) classes.push('row--hour');
-  if (row.blocked) classes.push('row--blocked');
-  else if (row.open === 0) classes.push('row--full');
-  else if (row.players === 0) classes.push('row--open');
-
-  let action = '';
-  if (!past) {
-    if (row.blocked) action = smallBtn('unblock', tee, row.time, 'Unblock');
-    else if (!row.groups.length) action = smallBtn('block', tee, row.time, 'Block');
-  }
-
   // With back nine on, the toggled single-tee view names the tee right under
   // the time, where the eyes go first.
   const teeLabel = state.course.backNine
     ? '<span class="col-time__tee">' + (tee === 'B' ? 'Back nine' : 'Front nine') + '</span>'
     : '';
 
-  return '<tr class="' + classes.join(' ') + '">' +
+  return '<tr class="' + rowClasses(row, newHour) + '">' +
     '<td class="col-time">' + row.label + teeLabel + '</td>' +
     '<td><div class="spots">' + spotsHtml(row, tee, past) + '</div></td>' +
     '<td>' + feesHtml(row) + '</td>' +
-    '<td class="col-actions"><div class="actions">' + action + '</div></td>' +
   '</tr>';
 }
 
@@ -209,8 +204,10 @@ function renderTwoTees(past) {
 
   el.thead.innerHTML = '<tr>' +
     '<th scope="col" style="width:6.5rem">Time</th>' +
-    '<th scope="col" style="width:50%">Front nine — 1st tee</th>' +
-    '<th scope="col" style="width:50%">Back nine — 10th tee</th></tr>';
+    '<th scope="col">Front nine — 1st tee</th>' +
+    '<th scope="col" style="width:6.5rem">Fees</th>' +
+    '<th scope="col">Back nine — 10th tee</th>' +
+    '<th scope="col" style="width:6.5rem">Fees</th></tr>';
 
   let lastHour = null;
   const html = frontRows.map(function (front, i) {
@@ -221,31 +218,17 @@ function renderTwoTees(past) {
     lastHour = hour;
     return '<tr class="row' + (newHour ? ' row--hour' : '') + '">' +
       '<td class="col-time">' + front.label + '</td>' +
-      '<td class="tee-cell">' + teeStrip(front, 'F', past) + '</td>' +
-      '<td class="tee-cell">' + teeStrip(back, 'B', past) + '</td>' +
+      '<td class="tee-cell"><div class="spots">' + spotsHtml(front, 'F', past) + '</div></td>' +
+      '<td>' + feesHtml(front) + '</td>' +
+      '<td class="tee-cell"><div class="spots">' + spotsHtml(back, 'B', past) + '</div></td>' +
+      '<td>' + feesHtml(back) + '</td>' +
     '</tr>';
   }).join('');
-  el.rows.innerHTML = html || noMatchRow(3);
-}
-
-function teeStrip(row, tee, past) {
-  let action = '';
-  if (!past) {
-    if (row.blocked) action = smallBtn('unblock', tee, row.time, 'Unblock');
-    else if (!row.groups.length) action = smallBtn('block', tee, row.time, 'Block');
-  }
-  // One horizontal line with fixed-width fees and action zones — the action
-  // zone renders even when empty so the spots grid is the same width in
-  // every row and the columns line up down the sheet.
-  return '<div class="tee-cell__flex">' +
-      '<div class="spots">' + spotsHtml(row, tee, past) + '</div>' +
-      '<span class="tee-cell__fees">' + feesHtml(row) + '</span>' +
-      '<span class="tee-cell__action">' + action + '</span>' +
-    '</div>';
+  el.rows.innerHTML = html || noMatchRow(5);
 }
 
 function feesHtml(row) {
-  return row.groups.length && !row.blocked
+  return row.groups.length
     ? '<strong>' + T.money(row.revenue) + '</strong>'
     : '<span class="muted">—</span>';
 }
@@ -253,12 +236,7 @@ function feesHtml(row) {
 function spotsHtml(row, tee, past) {
   const spots = [];
   const span = ' style="grid-column:span ';
-  if (row.blocked) {
-    spots.push('<span class="spot spot--blocked"' + span + state.course.slotSize + '">' +
-      '<span class="spot__name">Blocked</span>' +
-      '<span class="spot__meta">' + esc(row.note || 'Blocked by the pro shop') + '</span></span>');
-    return spots.join('');
-  }
+
   for (const g of row.groups) {
     const checkedIn = g.status === 'checked-in';
     const meta = (checkedIn ? '<b class="spot__in">IN</b> · ' : '') +
@@ -269,7 +247,23 @@ function spotsHtml(row, tee, past) {
       '<span class="spot__name">' + esc(g.name) + '</span>' +
       '<span class="spot__meta">' + meta + '</span></button>');
   }
-  if (row.open > 0) {
+
+  if (row.blocked) {
+    // The blocked chip covers only the unbooked space; groups keep theirs.
+    const remaining = state.course.slotSize - row.players;
+    if (remaining > 0) {
+      const meta = esc(row.note ||
+        (row.groups.length ? 'No more bookings on this time' : 'Blocked by the pro shop'));
+      spots.push(past
+        ? '<span class="spot spot--blocked"' + span + remaining + '">' +
+            '<span class="spot__name">Blocked</span>' +
+            '<span class="spot__meta">' + meta + '</span></span>'
+        : '<button type="button" class="spot spot--blocked"' + span + remaining + '" ' +
+            'data-action="blocked" data-tee="' + tee + '" data-time="' + row.time + '">' +
+            '<span class="spot__name">Blocked</span>' +
+            '<span class="spot__meta">' + meta + '</span></button>');
+    }
+  } else if (row.open > 0) {
     const word = row.open + ' spot' + (row.open === 1 ? '' : 's');
     spots.push(past
       ? '<span class="spot spot--open spot--past"' + span + row.open + '">' +
@@ -281,11 +275,6 @@ function spotsHtml(row, tee, past) {
           '<span class="spot__meta">' + word + ' — add booking</span></button>');
   }
   return spots.join('');
-}
-
-function smallBtn(action, tee, time, label) {
-  return '<button class="btn btn--small" data-action="' + action + '" data-tee="' + tee +
-    '" data-time="' + time + '">' + label + '</button>';
 }
 
 /* ---------- Toolbar ---------- */
@@ -355,12 +344,7 @@ el.rows.addEventListener('click', function (e) {
 
   if (action === 'add') return openBookingDialog('add', tee, time);
   if (action === 'details') return openGroupDialog(tee, time, groupId);
-  if (action === 'block') return openBlockDialog(tee, time);
-  if (action === 'unblock') {
-    store.setBlocked(state.dateKey, tee, time, false).catch(function (err) {
-      window.alert(err.message || "Couldn't unblock that time — try again.");
-    });
-  }
+  if (action === 'blocked') return openBlockedDialog(tee, time);
 });
 
 function rowFor(tee, time) {
@@ -414,6 +398,8 @@ function openBookingDialog(mode, tee, time, groupId) {
   el['booking-error'].hidden = true;
   el['booking-form'].reset();
 
+  el['booking-block'].hidden = mode === 'edit';
+
   if (mode === 'edit') {
     const group = groupAt(tee, time, groupId);
     if (!group) return;
@@ -443,6 +429,22 @@ function openBookingDialog(mode, tee, time, groupId) {
 
 document.getElementById('booking-cancel').addEventListener('click', function () {
   el['booking-dialog'].close();
+});
+
+/* "Block this time" closes only the open space — groups on the time stay. */
+el['booking-block'].addEventListener('click', function () {
+  const t = state.target;
+  el['booking-block'].disabled = true;
+  store.setBlocked(state.dateKey, t.tee, t.time, true, '')
+    .then(function () {
+      el['booking-block'].disabled = false;
+      el['booking-dialog'].close();
+    })
+    .catch(function (err) {
+      el['booking-block'].disabled = false;
+      el['booking-error'].textContent = err.message || "Couldn't block that time — try again.";
+      el['booking-error'].hidden = false;
+    });
 });
 
 el['booking-form'].addEventListener('submit', function (e) {
@@ -649,13 +651,17 @@ el['move-form'].addEventListener('submit', function (e) {
     });
 });
 
-/* ---------- Block one time ---------- */
+/* ---------- Blocked time (unblock) dialog ---------- */
 
-function openBlockDialog(tee, time) {
+function openBlockedDialog(tee, time) {
   if (isPast()) return;
+  const row = rowFor(tee, time);
+  if (!row || !row.blocked) return;
   state.target = { tee: tee, time: time };
   el['block-error'].hidden = true;
   el['block-sub'].textContent = whereLabel(tee, time);
+  el['block-note'].textContent = row.note || '';
+  el['block-note'].hidden = !row.note;
   el['block-dialog'].showModal();
 }
 
@@ -663,13 +669,17 @@ document.getElementById('block-cancel').addEventListener('click', function () {
   el['block-dialog'].close();
 });
 
-el['block-form'].addEventListener('submit', function (e) {
-  e.preventDefault();
+el['block-unblock'].addEventListener('click', function () {
   const t = state.target;
-  store.setBlocked(state.dateKey, t.tee, t.time, true, el['b-reason'].value.trim())
-    .then(function () { el['block-dialog'].close(); })
+  el['block-unblock'].disabled = true;
+  store.setBlocked(state.dateKey, t.tee, t.time, false)
+    .then(function () {
+      el['block-unblock'].disabled = false;
+      el['block-dialog'].close();
+    })
     .catch(function (err) {
-      el['block-error'].textContent = err.message || "Couldn't block that time — try again.";
+      el['block-unblock'].disabled = false;
+      el['block-error'].textContent = err.message || "Couldn't unblock that time — try again.";
       el['block-error'].hidden = false;
     });
 });
