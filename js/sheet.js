@@ -160,7 +160,6 @@ function renderOneTee(tee, past) {
   const rows = T.dayRows(state.course, state.dateKey, state.dayData, tee);
   el.thead.innerHTML = '<tr>' +
     '<th scope="col" style="width:6.5rem">Time</th>' +
-    '<th scope="col" style="width:8rem">Status</th>' +
     '<th scope="col">' + (state.course.backNine ? esc(teeName(tee)) : 'Players') +
       ' — ' + state.course.slotSize + ' spots per tee time</th>' +
     '<th scope="col" style="width:6.5rem">Fees</th>' +
@@ -173,7 +172,7 @@ function renderOneTee(tee, past) {
     const newHour = hour !== lastHour;
     lastHour = hour;
     return renderRow(row, tee, newHour, past);
-  }).join('') || noMatchRow(5);
+  }).join('') || noMatchRow(4);
 }
 
 function renderRow(row, tee, newHour, past) {
@@ -191,7 +190,6 @@ function renderRow(row, tee, newHour, past) {
 
   return '<tr class="' + classes.join(' ') + '">' +
     '<td class="col-time">' + row.label + '</td>' +
-    '<td>' + statusBadge(row) + '</td>' +
     '<td><div class="spots">' + spotsHtml(row, tee, past) + '</div></td>' +
     '<td>' + feesHtml(row) + '</td>' +
     '<td class="col-actions"><div class="actions">' + action + '</div></td>' +
@@ -232,21 +230,10 @@ function teeStrip(row, tee, past) {
   }
   return '<div class="tee-cell__head">' +
       '<span class="tee-tag">' + (tee === 'B' ? 'Back' : 'Front') + '</span>' +
-      statusBadge(row) +
       '<span class="tee-cell__fees">' + feesHtml(row) + '</span>' +
       action +
     '</div>' +
     '<div class="spots">' + spotsHtml(row, tee, past) + '</div>';
-}
-
-function statusBadge(row) {
-  const allIn = row.groups.length > 0 &&
-    row.groups.every(function (g) { return g.status === 'checked-in'; });
-  if (row.blocked) return '<span class="badge badge--blocked">Blocked</span>';
-  if (allIn) return '<span class="badge badge--in">Checked in</span>';
-  if (row.players === 0) return '<span class="badge badge--open">Open</span>';
-  if (row.open > 0) return '<span class="badge badge--partial">' + row.open + ' left</span>';
-  return '<span class="badge badge--full">Full</span>';
 }
 
 function feesHtml(row) {

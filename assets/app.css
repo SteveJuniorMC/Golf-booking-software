@@ -368,19 +368,29 @@ tr.row--full { background: var(--fill); }
 }
 .spot--group { cursor: pointer; }
 .spot--group:hover { background: var(--fill); }
-.spot--checked { border-color: var(--good); background: #eef6ef; }
-.spot--checked:hover { background: #def0e2; }
+
+/* Checked-in groups sit dimmed — they're dealt with, mostly behind you. */
+.spot--checked { border-color: var(--hairline); background: var(--fill); color: var(--muted); }
+.spot--checked:hover { background: var(--fill-strong); }
+
+/* Open space is green, so a glance finds what's still sellable. */
 .spot--open {
-  border: 2px dashed var(--hairline);
-  color: var(--muted);
+  border: 2px dashed var(--good);
+  color: var(--good);
+  background: #eaf4ec;
   cursor: pointer;
 }
-.spot--open:hover { background: var(--fill); border-color: var(--ink); }
+.spot--open:hover { background: #d8ecdc; }
+.spot--open .spot__meta { color: inherit; }
+
+/* On past days, unbooked space is history, not opportunity — no green. */
 .spot--past, .spot--past:hover {
   background: var(--paper);
   border-color: var(--hairline);
+  color: var(--muted);
   cursor: default;
 }
+.spot--past .spot__meta { color: var(--muted); }
 .spot--blocked {
   border-color: var(--stop);
   color: var(--stop);
@@ -402,7 +412,19 @@ tr.row--full { background: var(--fill); }
   text-overflow: ellipsis;
 }
 .spot--blocked .spot__meta { color: inherit; }
-.spot__in { color: var(--good); }
+.spot__in { color: var(--muted); }
+
+/* Legend swatches: little copies of the spots themselves. */
+.swatch {
+  display: inline-block;
+  border: 2px solid var(--ink);
+  padding: .1rem .55rem;
+  font-weight: 700;
+  font-size: .85rem;
+}
+.swatch--open { border-style: dashed; border-color: var(--good); color: var(--good); background: #eaf4ec; }
+.swatch--in { border-color: var(--hairline); background: var(--fill); color: var(--muted); }
+.swatch--blocked { border-color: var(--stop); color: var(--stop); background: #fbeaea; }
 
 .actions {
   display: flex;
@@ -543,7 +565,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .55); }
   td.col-actions { display: none !important; }
   .panel, .sheet-wrap { border-width: 2px; }
   table.sheet th { background: #fff; color: #000; border-bottom: 2px solid #000; }
-  .badge { border-color: #000 !important; color: #000 !important; background: #fff !important; }
+  .badge, .swatch { border-color: #000 !important; color: #000 !important; background: #fff !important; }
   .spot { border-color: #000 !important; color: #000 !important; background: #fff !important; }
   .spot__meta, .spot__in { color: #000 !important; }
   a { text-decoration: none; }
