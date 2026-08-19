@@ -9,25 +9,235 @@
 </head>
 <body>
 
-<!-- Placeholder: the real tee sheet from the approved mockups lands here in a
-     later build phase. For now this page only enforces the guards: signed-out
-     visitors go to login, accounts without a finished course go to setup. -->
+<a class="skip" href="#sheet">Skip to tee sheet</a>
 
-<main class="shell-narrow">
-  <div class="big-card">
-    <h1>Loading your tee sheet…</h1>
-    <p class="muted">If you see this for more than a moment, something is wrong — tell us.</p>
+<header class="masthead">
+  <div class="wrap wrap--wide">
+    <div class="masthead__row">
+      <div>
+        <div class="masthead__name"><span id="course-name">…</span> — Tee Sheet</div>
+        <div class="masthead__sub">YourTeeSheet · signed in as <span id="user-email"></span></div>
+      </div>
+      <div class="masthead__sub" id="course-phone-wrap" hidden>Pro shop: <strong id="course-phone"></strong></div>
+    </div>
   </div>
+</header>
+
+<main class="wrap wrap--wide" id="main">
+
+  <div class="notice no-print" id="offline" hidden>
+    You're offline — the sheet shows the last thing it saw, and changes can't be saved until the connection returns.
+  </div>
+
+  <div class="toolbar no-print">
+    <div class="toolbar__group date-nav" id="date-nav">
+      <button class="btn date-nav__arrow" id="prev-day" aria-label="Previous day">&larr;</button>
+      <label class="date-nav__pick" title="Open the calendar">
+        <span id="date-text" aria-hidden="true"></span>
+        <input type="date" id="date-input" aria-label="Tee sheet date">
+      </label>
+      <button class="btn date-nav__arrow" id="next-day" aria-label="Next day">&rarr;</button>
+      <button class="btn btn--small" id="today" hidden>Jump to today</button>
+      <div class="choices" role="radiogroup" aria-label="Which tee to show" id="tee-toggle" hidden>
+        <label class="choice"><input type="radio" name="tee" value="F" checked><span>Front nine</span></label>
+        <label class="choice"><input type="radio" name="tee" value="B"><span>Back nine</span></label>
+      </div>
+    </div>
+    <div class="toolbar__group">
+      <label for="filter" class="nowrap" style="margin:0">Show</label>
+      <select id="filter" style="width:auto">
+        <option value="all">All tee times</option>
+        <option value="booked">Booked only</option>
+        <option value="open">Open only</option>
+      </select>
+      <button class="btn btn--small" id="block-range">Block times&hellip;</button>
+      <button class="btn btn--small" id="print">Print sheet</button>
+      <button class="btn btn--small" id="help">Help</button>
+      <a class="btn btn--small" href="setup.html">Settings</a>
+      <button class="btn btn--small" id="signout">Sign out</button>
+    </div>
+  </div>
+
+  <h1 id="sheet-heading" style="font-size:1.5rem"></h1>
+
+  <div class="sheet-wrap" id="sheet">
+    <table class="sheet">
+      <caption class="skip">Tee sheet for the selected day</caption>
+      <thead id="thead"></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span class="badge badge--open">Open</span>
+    <span class="badge badge--partial">Spots left</span>
+    <span class="badge badge--full">Full</span>
+    <span class="badge badge--in">Checked in</span>
+    <span class="badge badge--blocked">Blocked</span>
+    <span class="muted small no-print">Click a group to check in, edit, move, or cancel · click open space to add a booking</span>
+    <span class="muted small">Printed <span id="printed-at"></span></span>
+  </div>
+
 </main>
 
-<script type="module">
-  import { requireAuth, requireCourse } from './js/guard.js';
-  requireAuth(async function (user) {
-    const course = await requireCourse(user.uid);
-    if (course) {
-      document.querySelector('h1').textContent = course.name + ' — sheet coming soon';
-    }
-  });
-</script>
+<!-- ================= Add / edit booking ================= -->
+<dialog id="booking-dialog">
+  <form method="dialog" id="booking-form">
+    <div class="dialog__head" id="booking-title">Add booking</div>
+    <div class="dialog__body">
+      <div class="error" id="booking-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="booking-sub"></p>
+      <div class="field">
+        <label for="d-name">Name</label>
+        <input type="text" id="d-name" required>
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label id="d-size-label">Players</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-size-label" id="d-size-choices"></div>
+        </div>
+        <div class="field">
+          <label id="d-holes-label">Holes</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-holes-label">
+            <label class="choice"><input type="radio" name="d-holes" value="18" checked><span>18</span></label>
+            <label class="choice"><input type="radio" name="d-holes" value="9"><span>9</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label id="d-cart-label">Cart</label>
+          <div class="choices" role="radiogroup" aria-labelledby="d-cart-label">
+            <label class="choice"><input type="radio" name="d-cart" value="yes" checked><span>Riding</span></label>
+            <label class="choice"><input type="radio" name="d-cart" value="no"><span>Walking</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="d-phone">Phone <span class="field__hint">— optional</span></label>
+        <input type="tel" id="d-phone">
+      </div>
+      <div class="field">
+        <label for="d-note">Note <span class="field__hint">— optional</span></label>
+        <input type="text" id="d-note" placeholder="Member account, rentals, league play...">
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="booking-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="booking-save">Save booking</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= Group details ================= -->
+<dialog id="group-dialog">
+  <div class="dialog__head" id="g-title">Booking</div>
+  <div class="dialog__body">
+    <div class="error" id="g-error" hidden></div>
+    <p class="muted" style="margin-top:0" id="g-sub"></p>
+    <div class="lines" id="g-lines"></div>
+  </div>
+  <div class="dialog__foot">
+    <button class="btn btn--danger" type="button" id="g-cancel-booking">Cancel booking</button>
+    <button class="btn" type="button" id="g-edit">Edit</button>
+    <button class="btn" type="button" id="g-move">Move&hellip;</button>
+    <button class="btn" type="button" id="g-close">Close</button>
+    <button class="btn btn--primary" type="button" id="g-checkin">Check in</button>
+  </div>
+</dialog>
+
+<!-- ================= Move booking ================= -->
+<dialog id="move-dialog">
+  <form method="dialog" id="move-form">
+    <div class="dialog__head">Move booking</div>
+    <div class="dialog__body">
+      <div class="error" id="move-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="move-sub"></p>
+      <div class="grid">
+        <div class="field">
+          <label for="m-date">Move to which day?</label>
+          <input type="date" id="m-date">
+        </div>
+        <div class="field" id="m-tee-field" hidden>
+          <label id="m-tee-label">Which tee?</label>
+          <div class="choices" role="radiogroup" aria-labelledby="m-tee-label">
+            <label class="choice"><input type="radio" name="m-tee" value="F" checked><span>Front</span></label>
+            <label class="choice"><input type="radio" name="m-tee" value="B"><span>Back</span></label>
+          </div>
+        </div>
+      </div>
+      <button class="btn" type="button" id="m-find">Find open times</button>
+      <div class="field" style="margin-top:1rem" id="m-times-field" hidden>
+        <label id="m-time-label">Open times</label>
+        <div id="m-times"></div>
+      </div>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="move-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="move-save" disabled>Move booking</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= Block one time ================= -->
+<dialog id="block-dialog">
+  <form method="dialog" id="block-form">
+    <div class="dialog__head">Block tee time</div>
+    <div class="dialog__body">
+      <div class="error" id="block-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="block-sub"></p>
+      <div class="field">
+        <label for="b-reason">Reason</label>
+        <input type="text" id="b-reason" value="Course maintenance">
+      </div>
+      <p class="small muted">Blocked times can't be booked. Unblock any time from the sheet.</p>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="block-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit">Block time</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ================= Block a range ================= -->
+<dialog id="block-range-dialog">
+  <form method="dialog" id="br-form">
+    <div class="dialog__head">Block a stretch of times</div>
+    <div class="dialog__body">
+      <div class="error" id="br-error" hidden></div>
+      <p class="muted" style="margin-top:0" id="br-sub"></p>
+      <div class="field" id="br-tee-field" hidden>
+        <label id="br-tee-label">Which tee?</label>
+        <div class="choices" role="radiogroup" aria-labelledby="br-tee-label">
+          <label class="choice"><input type="radio" name="br-tee" value="F" checked><span>Front</span></label>
+          <label class="choice"><input type="radio" name="br-tee" value="B"><span>Back</span></label>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label for="br-from">From</label>
+          <select id="br-from"></select>
+        </div>
+        <div class="field">
+          <label for="br-to">Through</label>
+          <select id="br-to"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="br-reason">Reason</label>
+        <input type="text" id="br-reason" value="Course maintenance">
+      </div>
+      <div class="error" id="br-consequence" hidden></div>
+      <label id="br-confirm-wrap" style="display:flex;gap:.6rem;align-items:flex-start;font-weight:700" hidden>
+        <input type="checkbox" id="br-confirm" style="width:1.4rem;height:1.4rem;margin-top:.15rem">
+        <span id="br-confirm-text"></span>
+      </label>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn" type="button" id="br-cancel">Cancel</button>
+      <button class="btn btn--primary" type="submit" id="br-save">Block times</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="js/sheet.js"></script>
 </body>
 </html>
