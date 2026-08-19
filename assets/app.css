@@ -769,6 +769,28 @@ table.rate-grid { border-collapse: collapse; width: 100%; }
 }
 
 .tee-cell { min-width: 21rem; }
+
+/* Spots, fees, and the block action share one line, keeping two-tee rows
+   exactly as tall as single-tee rows. */
+.tee-cell__flex {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.tee-cell__flex .spots { flex: 1; min-width: 16rem; }
+.tee-cell__fees { margin-left: auto; font-weight: 700; white-space: nowrap; }
+
+/* The toggled single-tee view names the tee right under the time. */
+.col-time__tee {
+  display: block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Still used by the static mockup pages. */
 .tee-cell__head {
   display: flex;
   align-items: center;
@@ -784,7 +806,6 @@ table.rate-grid { border-collapse: collapse; width: 100%; }
   border: 2px solid var(--ink);
   padding: .1rem .4rem;
 }
-.tee-cell__fees { margin-left: auto; font-weight: 700; white-space: nowrap; }
 
 /* ---------- Tour overlay ---------- */
 

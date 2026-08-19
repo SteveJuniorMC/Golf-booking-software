@@ -188,8 +188,14 @@ function renderRow(row, tee, newHour, past) {
     else if (!row.groups.length) action = smallBtn('block', tee, row.time, 'Block');
   }
 
+  // With back nine on, the toggled single-tee view names the tee right under
+  // the time, where the eyes go first.
+  const teeLabel = state.course.backNine
+    ? '<span class="col-time__tee">' + (tee === 'B' ? 'Back nine' : 'Front nine') + '</span>'
+    : '';
+
   return '<tr class="' + classes.join(' ') + '">' +
-    '<td class="col-time">' + row.label + '</td>' +
+    '<td class="col-time">' + row.label + teeLabel + '</td>' +
     '<td><div class="spots">' + spotsHtml(row, tee, past) + '</div></td>' +
     '<td>' + feesHtml(row) + '</td>' +
     '<td class="col-actions"><div class="actions">' + action + '</div></td>' +
@@ -228,12 +234,13 @@ function teeStrip(row, tee, past) {
     if (row.blocked) action = smallBtn('unblock', tee, row.time, 'Unblock');
     else if (!row.groups.length) action = smallBtn('block', tee, row.time, 'Block');
   }
-  return '<div class="tee-cell__head">' +
-      '<span class="tee-tag">' + (tee === 'B' ? 'Back' : 'Front') + '</span>' +
+  // One horizontal line — spots, then fees, then the action — so two-tee
+  // rows stay exactly as tall as single-tee rows.
+  return '<div class="tee-cell__flex">' +
+      '<div class="spots">' + spotsHtml(row, tee, past) + '</div>' +
       '<span class="tee-cell__fees">' + feesHtml(row) + '</span>' +
       action +
-    '</div>' +
-    '<div class="spots">' + spotsHtml(row, tee, past) + '</div>';
+    '</div>';
 }
 
 function feesHtml(row) {
