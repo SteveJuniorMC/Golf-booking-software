@@ -234,12 +234,13 @@ function teeStrip(row, tee, past) {
     if (row.blocked) action = smallBtn('unblock', tee, row.time, 'Unblock');
     else if (!row.groups.length) action = smallBtn('block', tee, row.time, 'Block');
   }
-  // One horizontal line — spots, then fees, then the action — so two-tee
-  // rows stay exactly as tall as single-tee rows.
+  // One horizontal line with fixed-width fees and action zones — the action
+  // zone renders even when empty so the spots grid is the same width in
+  // every row and the columns line up down the sheet.
   return '<div class="tee-cell__flex">' +
       '<div class="spots">' + spotsHtml(row, tee, past) + '</div>' +
       '<span class="tee-cell__fees">' + feesHtml(row) + '</span>' +
-      action +
+      '<span class="tee-cell__action">' + action + '</span>' +
     '</div>';
 }
 
